@@ -22,7 +22,7 @@ import com.scigames.slidegame.R;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
+//import android.net.Uri;
 import android.os.Bundle;
 //import android.view.KeyEvent;
 //import android.text.InputType;
@@ -46,7 +46,7 @@ public class CameraActivity extends Activity {
     private ImageView imageView;
     private String TAG = "CameraActivity";
     private Bitmap photo;
-    private String photoUri;
+   // private String photoUri;
 
     public CameraActivity(){
     	
@@ -61,7 +61,7 @@ public class CameraActivity extends Activity {
         Button photoButton = (Button) this.findViewById(R.id.button1);
         photoButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
+           // @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
                 startActivityForResult(cameraIntent, CAMERA_REQUEST); 

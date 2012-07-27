@@ -36,27 +36,39 @@
     <!-- Text Fields -->
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="password">E-mail Address or Password</string>
+    <string name="password">Class Password</string>
 	<string name="bracelet_id">Bracelet ID</string>
 	<string name="mass">Mass</string>
     
     <!--  Messages -->
-    <string name="welcome_note">Welcome to SciGames!  Please log in to begin your play session.</string>
+    <string name="welcome_note">Welcome to SciGames!\nPlease log in to begin your play session.</string>
     <string name="not_a_scigamer">Not a SciGamer yet?</string>
-    <string name="tell_us_about_you">Let\’s create your sciGamer profile. Tell us a little about yourself:</string>
+    <string name="tell_us_about_you">Let\’s create your sciGamer profile.\nTell us a little about yourself:</string>
     <string name="rfid_title">Bracelet Scan</string>
     <string name="mass_title">Measuring Mass</string>
     <string name="photo_title">Profile Photo</string>
     <string name="email_title">Email Address</string>
     <string name="rfid_instructions">See that bracelet over there? Pick one up and scan it on the sensor below. 
         	Then put it on; you\’ll use it to capture all of your game play data."</string>
-    <string name="mass_instructions">sciGames calculations are based on a player\’s mass. Please step on the scale and stand still.
-<i>Don\’t worry, we keep this private.</i></string>
+    <string name="mass_instructions">sciGames calculations are based on a player\’s mass. Please step on the scale and stand still. <i>Don\’t worry, we keep this private.</i></string>
 	<string name="photo_instructions">Let’s take a profile photo! Smile big!</string>
 	<string name="email_instructions">You can use your email address to play SciGames online and log in for your next playground visit.</string>
+    <string name="img_descrip">your profile picture</string>
     <string name="greeting">Hi, %1$s %2$s! </string>
-        
-        
+    
+    <!--  Profile Page -->
+    <string name="profile_sentence1">Here\'s your info:</string>
+    <string name="profile_first_name">First Name: %1$s</string>
+    <string name="profile_last_name">Last Name: %1$s</string>
+    <string name="profile_school_name">School Name: %1$s</string>
+    <string name="profile_teacher_name">Teacher Name: %1$s</string>
+    <string name="profile_classid">Class ID: %1$s</string>
+    <string name="profile_mass">Mass: %1$s</string>
+	<string name="profile_email">Email: %1$s</string>
+	<string name="profile_password">Password: %1$s</string>
+    <string name="profile_rfid">RFID: %1$s</string>
+    
+    
     <!-- Place Holders -->
     <string name="logo">Logo</string>
     
@@ -64,5 +76,6 @@
     
     <!-- This is a complex string containing style runs. -->
     <string name="main_label">first name<u>th<ignore>e</ignore>re</u>, <i>you</i> <b>Activity</b>!</string>
+    <string name="class_id">ClassID</string>
 </resources>
 

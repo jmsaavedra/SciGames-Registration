@@ -16,23 +16,24 @@
 
 package com.scigames.slidegame;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
+//import java.io.ByteArrayInputStream;
+//import java.io.FileNotFoundException;
+//import java.io.IOException;
+//import java.net.URI;
 
 import com.scigames.slidegame.R;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+//import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+//import android.graphics.Bitmap;
+//import android.graphics.BitmapFactory;
+//import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+//import android.os.Handler;
+//import android.os.Message;
 //import android.view.KeyEvent;
 import android.text.InputType;
 import android.util.Log;
@@ -41,10 +42,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+//import android.widget.ImageView;
+//import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -54,26 +56,19 @@ import android.widget.TextView;
  */
 public class Registration5EmailActivity extends Activity {
 
+    private String TAG = "Registration5Activity";
     
     static final private int BACK_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
 
     private String firstNameIn = "FNAME";
-    private String lastNameIn = "LNAME";;
+    private String lastNameIn = "LNAME";
+    private String classIdIn = "CLASSID";
+    private String massIn = "MASS";
+    private String passwordIn = "PASSWORD";
+    private String rfidIn = "RFID";
+    private EditText email;
     //private String passwordIn = "PWORD";;
-    
-    private EditText thisMass;
-    private EditText firstName;
-    private EditText lastName;
-    //private EditText password;
-    private String TAG = "Registration5Activity";
-    
-    ProgressDialog progressBar;
-    private int progressBarStatus = 0;
-    private Handler progressBarHandler = new Handler();
-    private int currProgress = 0;
-    
-    private String myMass = "";
     
     public Registration5EmailActivity() {
     	
@@ -90,29 +85,27 @@ public class Registration5EmailActivity extends Activity {
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
     	lastNameIn = i.getStringExtra("lName");
-    	//passwordIn = i.getStringExtra("pword");
+    	classIdIn = i.getStringExtra("mClass");
+    	massIn = i.getStringExtra("mMass");
+    	passwordIn = i.getStringExtra("mPass");
+    	rfidIn = i.getStringExtra("mRfid");
     	Log.d(TAG,"...getStringExtra");
     	
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.registration5_email);
         Log.d(TAG,"...setContentView");
         
-        // Find the text editor view inside the layout, because we
-        // want to do various programmatic things with it.
-     //   thisMass = (EditText) findViewById(R.id.mass);
+        email = (EditText) findViewById(R.id.email);
         /* to hide the keyboard on launch, then open when tap in firstname field */
-      /*  thisMass.setInputType(InputType.TYPE_NULL);
-        thisMass.setOnTouchListener(new View.OnTouchListener() {
-  			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-  			thisMass.setInputType(InputType.TYPE_CLASS_TEXT);
-  			thisMass.onTouchEvent(event); // call native handler
+        email.setInputType(InputType.TYPE_NULL);
+        email.setOnTouchListener(new View.OnTouchListener() {
+  			public boolean onTouch(View v, MotionEvent event) {
+  			email.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+  			email.onTouchEvent(event); // call native handler
 	        return true; // consume touch even
 			} 
-        });*/
-        firstName = (EditText) findViewById(R.id.first_name);
-        lastName = (EditText) findViewById(R.id.last_name);
-        //password = (EditText) findViewById(R.id.password);
+        });
+        
         Log.d(TAG,"...instantiateEditTexts");
         
         //display name in greeting sentence
@@ -121,11 +114,7 @@ public class Registration5EmailActivity extends Activity {
         greets.setText(String.format(res.getString(R.string.greeting), firstNameIn, lastNameIn));
         Log.d(TAG, greets.toString());
         Log.d(TAG,"...Greetings");
-        
-        //set info to what we know already
-        //firstName.setText(firstNameIn);
-        //lastName.setText(lastNameIn);
-        
+               
         // Hook up button presses to the appropriate event handler.
         ((Button) findViewById(R.id.back)).setOnClickListener(mBackListener);
         ((Button) findViewById(R.id.continue_button)).setOnClickListener(mContinueButtonListener);
@@ -183,9 +172,7 @@ public class Registration5EmailActivity extends Activity {
             finish();
             return true;
         case CLEAR_ID:
-        	thisMass.setText("");
-            //firstName.setText("");
-            //password.setText("");
+        	email.setText("");
             return true;
         }
 
@@ -195,10 +182,15 @@ public class Registration5EmailActivity extends Activity {
     OnClickListener mContinueButtonListener = new OnClickListener(){
     	public void onClick(View v) {
     		Log.d(TAG,"...mContinueButtonListener onClick");
-       		Intent i = new Intent(Registration5EmailActivity.this, Registration5EmailActivity.class);
+       		Intent i = new Intent(Registration5EmailActivity.this, ProfileActivity.class);
     		Log.d(TAG,"new Intent");
-    		i.putExtra("fName",firstNameIn);
-    		i.putExtra("lName",lastNameIn);
+    		i.putExtra("fName", firstNameIn);
+    		i.putExtra("lName", lastNameIn);
+			i.putExtra("mClass", classIdIn);
+			i.putExtra("mMass", massIn);
+			i.putExtra("mEmail", email.getText().toString());
+			i.putExtra("mPass", passwordIn);
+			i.putExtra("mRfid", rfidIn);
     		//i.putExtra("pword",password.getText().toString());
     		Log.d(TAG,"startActivity...");
     		Registration5EmailActivity.this.startActivity(i);
@@ -207,8 +199,6 @@ public class Registration5EmailActivity extends Activity {
     	}
     };
     	
-       
-
     /**
      * A call-back for when the user presses the back button.
      */
@@ -217,132 +207,30 @@ public class Registration5EmailActivity extends Activity {
             finish();
         }
     };
+    
+    //---- this function hides the keyboard when the user clicks outside of keyboard when it's open!
+    @Override 
+    public boolean dispatchTouchEvent(MotionEvent event) {
 
-    /**
-     * A call-back for when the user presses the clear button.
-     */
-    OnClickListener mScanButtonListener = new OnClickListener() {
-        public void onClick(View v) {
-        	Log.d(TAG,"...mScanButtonListener onClick");
-        	// prepare for a progress bar dialog
-			progressBar = new ProgressDialog(v.getContext());
-			progressBar.setCancelable(true);
-			progressBar.setMessage("Measuring Your Mass ...");
-			progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			progressBar.setProgress(0);
-			progressBar.setMax(100);
-			progressBar.show();
-			//reset progress bar status
-			progressBarStatus = 0;
-			//reset currProgress
-			currProgress = 0;
-			
-			new Thread (new Runnable() {
-				public void run() {
-					while (progressBarStatus < 100) {
-					  // process some tasks
-						progressBarStatus = measureMass();
-						// your computer is too fast, sleep 1 second
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						// Update the progress bar
-						progressBarHandler.post(new Runnable() {
-						
-							public void run() {
-								progressBar.setProgress(progressBarStatus);
-							}
-						});
-					}
-					// ok, time is up
-					if (progressBarStatus >= 100) {
-						Log.d(TAG, "...progressBar time's up");
-						// sleep 2 seconds, so that you can see the 100%
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						Message msg = new Message();
-				        String textTochange = myMass;
-				        msg.obj = textTochange;
-				        mHandler.sendMessage(msg);
-						// close the progress bar dialog
-						progressBar.dismiss();
-						Log.d(TAG, "...progressBar.dismiss()");
-        			}
+        View v = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
 
-				}
+        if (v instanceof EditText) {
+            View w = getCurrentFocus();
+            int scrcoords[] = new int[2];
+            w.getLocationOnScreen(scrcoords);
+            float x = event.getRawX() + w.getLeft() - scrcoords[0];
+            float y = event.getRawY() + w.getTop() - scrcoords[1];
 
-			}).start(); 	
-		}
-        
-		Handler mHandler = new Handler() {
-	        @Override
-	        public void handleMessage(Message msg){
-	        	String _mass = (String)msg.obj;
-	    		//check if RFID got read
-	    		//	Log.d(TAG, "check if rfID == 'searching'...");
-	    	   	if(_mass == "measuring"){
-	    	           //EditText braceletIdResp = (EditText)findViewById(R.id.bracelet_id);
-	    	            //braceletIdResp.setText("No Bracelet Found, please try again");
-	    	   		thisMass = (EditText) findViewById(R.id.mass);
-	    	   		Log.d(TAG, "...myMass == 'measuring'");
-	    	   		thisMass.setText("No Mass Captured, please try again");
-	    	    	Log.d(TAG, "...measuredMass.setText none found");
-	    	  	}
-	        
-	    	   	//call setText here
-	        }
-		};
+            Log.d("Activity", "Touch event "+event.getRawX()+","+event.getRawY()+" "+x+","+y+" rect "+w.getLeft()+","+w.getTop()+","+w.getRight()+","+w.getBottom()+" coords "+scrcoords[0]+","+scrcoords[1]);
+            if (event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom()) ) { 
 
-    };      
-  
-	// progress bar simulator... will hold ADK stuff...
-	public int measureMass() {
-		myMass = "measuring";
-		if (currProgress <= 95) {
-			currProgress++;
-			return currProgress;
-			// wait for Arduino here
-		} else {
-			return 100;
-		}
-	}
- 
-    public void onActivityResult(int requestCode, Intent data){
-    //public void onActivityResult(int requestCode, int resultCode, Intent data) {     
-      super.onActivityResult(requestCode, 1, data); 
-      Log.d(TAG,"...super.onActivityResult");
-      switch(requestCode) { 
-
-      case (0) : { 
-        	Log.d(TAG,"...case(0)");
-          //if (resultCode == Activity.RESULT_OK) { 
-        	//  Log.d(TAG,"...RESULT_OK");
-        	  
-        	  ImageView previewThumbnail = new ImageView(this);
-        	  Log.d(TAG,"...newImageView");
-
-        	    Bitmap b = BitmapFactory.decodeByteArray(
-        	            getIntent().getByteArrayExtra("byteArray"),0,getIntent().getByteArrayExtra("byteArray").length);        
-        	  Log.d(TAG,"...BitmapFactory.decodeByteArray");
-        	  
-        	  previewThumbnail.setImageBitmap(b);
-        	  Log.d(TAG,"...setImageBitmap");
-        	  
-        	  LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
-        	  Log.d(TAG,"...new layoutparams");
-        	  
-        	  previewThumbnail.setLayoutParams(layoutParams);
-        	  Log.d(TAG,"...setLayoutParams");
-          	//}
-          	break;
-        	}
-      	} 
-    }
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+            }
+        }
+    return ret;
+    }    
 }
     
 

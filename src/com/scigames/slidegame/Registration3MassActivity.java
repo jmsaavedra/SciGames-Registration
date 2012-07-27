@@ -16,10 +16,10 @@
 
 package com.scigames.slidegame;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
+//import java.io.ByteArrayInputStream;
+//import java.io.FileNotFoundException;
+//import java.io.IOException;
+//import java.net.URI;
 
 import com.scigames.slidegame.R;
 
@@ -29,7 +29,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+//import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -54,19 +54,18 @@ import android.widget.TextView;
  */
 public class Registration3MassActivity extends Activity {
 
+    private String TAG = "Registration3Activity";
     
     static final private int BACK_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
 
     private String firstNameIn = "FNAME";
-    private String lastNameIn = "LNAME";;
-    //private String passwordIn = "PWORD";;
+    private String lastNameIn = "LNAME";
+    private String classIdIn = "CLASSID";
+    private String passwordIn = "PASSWORD";
+    private String rfidIn = "RFID";
     
     private EditText thisMass;
-    private EditText firstName;
-    private EditText lastName;
-    //private EditText password;
-    private String TAG = "Registration3Activity";
     
     ProgressDialog progressBar;
     private int progressBarStatus = 0;
@@ -90,7 +89,9 @@ public class Registration3MassActivity extends Activity {
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
     	lastNameIn = i.getStringExtra("lName");
-    	//passwordIn = i.getStringExtra("pword");
+    	classIdIn = i.getStringExtra("mClass");
+    	passwordIn = i.getStringExtra("mPass");
+    	rfidIn = i.getStringExtra("mRfid");
     	Log.d(TAG,"...getStringExtra");
     	
         // Inflate our UI from its XML layout description.
@@ -103,16 +104,13 @@ public class Registration3MassActivity extends Activity {
         /* to hide the keyboard on launch, then open when tap in firstname field */
         thisMass.setInputType(InputType.TYPE_NULL);
         thisMass.setOnTouchListener(new View.OnTouchListener() {
-  			@Override
+  			//@Override
 			public boolean onTouch(View v, MotionEvent event) {
   			thisMass.setInputType(InputType.TYPE_CLASS_TEXT);
   			thisMass.onTouchEvent(event); // call native handler
 	        return true; // consume touch even
 			} 
         });
-        firstName = (EditText) findViewById(R.id.first_name);
-        lastName = (EditText) findViewById(R.id.last_name);
-        //password = (EditText) findViewById(R.id.password);
         Log.d(TAG,"...instantiateEditTexts");
         
         //display name in greeting sentence
@@ -198,8 +196,12 @@ public class Registration3MassActivity extends Activity {
     		Log.d(TAG,"...mContinueButtonListener onClick");
        		Intent i = new Intent(Registration3MassActivity.this, Registration4PhotoActivity.class);
     		Log.d(TAG,"new Intent");
-    		i.putExtra("fName",firstNameIn);
-    		i.putExtra("lName",lastNameIn);
+    		i.putExtra("fName", firstNameIn);
+    		i.putExtra("lName", lastNameIn);
+    		i.putExtra("mMass", thisMass.getText().toString());
+			i.putExtra("mClass", classIdIn);
+			i.putExtra("mPass", passwordIn);
+			i.putExtra("mRfid", rfidIn);
     		//i.putExtra("pword",password.getText().toString());
     		Log.d(TAG,"startActivity...");
     		Registration3MassActivity.this.startActivity(i);

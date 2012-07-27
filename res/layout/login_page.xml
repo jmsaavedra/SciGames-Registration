@@ -22,15 +22,17 @@
 
     <EditText
         android:id="@+id/first_name"
+        android:inputType="textPersonName|textCapWords|textNoSuggestions" 
         android:layout_width="200dip"
         android:layout_height="50dip"
-        android:layout_marginLeft="400dip"
-        android:layout_marginTop="225dip"
+        android:layout_marginLeft="50dip"
+        android:layout_marginTop="350dip"
         android:ems="10"
         android:freezesText="true"
         android:hint="@string/first_name"
-        android:imeOptions="actionNext"
-        android:inputType="textPersonName|textCapWords|textNoSuggestions" />
+        android:imeOptions="actionNext" >
+        <requestFocus />
+        </EditText>
     <!-- <requestFocus /> -->
 
     <EditText
@@ -49,16 +51,27 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="400dp"
+        android:layout_width="280dp"
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/first_name"
-        android:layout_alignRight="@+id/last_name"
         android:layout_below="@+id/first_name"
         android:layout_marginBottom="50dp"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textEmailAddress" />
-
+        android:imeOptions="actionNext"
+        android:inputType="textPassword" />
+    
+    <EditText
+        android:id="@+id/class_id"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@+id/password"
+        android:layout_alignBottom="@+id/password"
+        android:layout_toRightOf="@+id/password"
+        android:ems="10"
+        android:hint="@string/class_id"
+        android:inputType="number" />
+    
     <Button
         android:id="@+id/login_button"
         android:layout_width="200dp"
@@ -131,9 +144,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/clear"
+        android:lineSpacingExtra="25dp"
         android:layout_marginRight="21dp"
-        android:layout_marginTop="39dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="100dp"
         android:text="@string/welcome_note"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

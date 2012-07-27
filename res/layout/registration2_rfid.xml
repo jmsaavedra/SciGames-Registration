@@ -46,7 +46,7 @@
 
     <TextView
         android:id="@+id/instructions"
-        android:layout_width="600dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
         android:layout_marginLeft="59dp"
@@ -59,32 +59,35 @@
         android:id="@+id/continue_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_above="@+id/back"
+		android:layout_marginTop="215dp"
         android:layout_alignLeft="@+id/instructions"
-        android:layout_marginBottom="46dp"
+        android:layout_below="@+id/scan"
         android:text="@string/continue_button" />
+    <!-- android:layout_below="@+id/bracelet_id" -->
 
     <Button
         android:id="@+id/scan"
         android:layout_width="200dp"
         android:layout_height="50dp"
+        android:layout_marginTop="450dp"
         android:layout_alignLeft="@+id/continue_button"
-        android:layout_centerVertical="true"
         android:text="@string/rfid_scan_button" />
+        <!-- android:layout_centerVertical="true" -->
+        
 
     <EditText
         android:id="@+id/bracelet_id"
         android:layout_width="400dp"
         android:layout_height="50dp"
-        android:layout_above="@+id/continue_button"
+        android:layout_below="@+id/scan"
+        android:layout_marginTop="75dp"
         android:layout_alignLeft="@+id/continue_button"
         android:layout_marginBottom="28dp"
         android:ems="10"
         android:hint="@string/bracelet_id"
-        android:inputType="textEmailAddress" >
+        android:inputType="textEmailAddress" />
 
-        <requestFocus />
-    </EditText>
+
 <!-- 
     <ProgressBar
         android:id="@+id/scan_progress"

@@ -16,21 +16,28 @@
 
 package com.scigames.slidegame;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
+//import java.io.ByteArrayInputStream;
+//import java.io.FileNotFoundException;
+//import java.io.IOException;
+//import java.net.URI;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 
 import com.scigames.slidegame.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.os.AsyncTask;
+//import android.net.Uri;
 import android.os.Bundle;
 //import android.view.KeyEvent;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +48,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * This class provides a basic demonstration of how to write an Android
@@ -48,19 +56,18 @@ import android.widget.LinearLayout;
  * displays and edits some internal text.
  */
 public class ProfileActivity extends Activity {
-
+    private String TAG = "ProfileActivity";
     
-    static final private int BACK_ID = Menu.FIRST;
-    static final private int CLEAR_ID = Menu.FIRST + 1;
+	static final private int QUIT_ID = Menu.FIRST;
+    static final private int BACK_ID = Menu.FIRST + 1;
 
     private String firstNameIn = "FNAME";
-    private String lastNameIn = "LNAME";;
-    private String passwordIn = "PWORD";;
-    
-    private EditText firstName;
-    private EditText lastName;
-    private EditText password;
-    private String TAG = "ProfileActivity";
+    private String lastNameIn = "LNAME";
+    private String passwordIn = "PWORD";
+    private String massIn = "MASS";
+    private String emailIn = "EMAIL";
+    private String classIdIn = "CLASSID";
+    private String rfidIn = "RFID";
     
     public ProfileActivity() {
     	
@@ -76,78 +83,81 @@ public class ProfileActivity extends Activity {
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
     	lastNameIn = i.getStringExtra("lName");
-    	passwordIn = i.getStringExtra("pword");
+    	passwordIn = i.getStringExtra("mPass");
+    	massIn = i.getStringExtra("mMass");
+    	emailIn = i.getStringExtra("mEmail");
+    	classIdIn = i.getStringExtra("mClass");
+    	rfidIn = i.getStringExtra("mRfid");
     	Log.d(TAG,"...getStringExtra");
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.profile_page);
         Log.d(TAG,"...setContentView");
-        // Find the text editor view inside the layout, because we
-        // want to do various programmatic things with it.
-        firstName = (EditText) findViewById(R.id.first_name);
-        /* to hide the keyboard on launch, then open when tap in firstname field */
-        firstName.setInputType(InputType.TYPE_NULL);
-        firstName.setOnTouchListener(new View.OnTouchListener() {
-  			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-	        firstName.setInputType(InputType.TYPE_CLASS_TEXT);
-	        firstName.onTouchEvent(event); // call native handler
-	        return true; // consume touch even
-			} 
-        });
-        lastName = (EditText) findViewById(R.id.last_name);
-        password = (EditText) findViewById(R.id.password);
-        Log.d(TAG,"...instantiateEditTexts");
         
         // Hook up button presses to the appropriate event handler.
-        ((Button) findViewById(R.id.back)).setOnClickListener(mBackListener);
-        ((Button) findViewById(R.id.clear)).setOnClickListener(mClearListener);
-        ((Button) findViewById(R.id.take_picture)).setOnClickListener(mTakePictureListener);
-        Log.d(TAG,"...instantiateButtons");
+        //((Button) findViewById(R.id.back)).setOnClickListener(mBackListener);
+        //((Button) findViewById(R.id.clear)).setOnClickListener(mClearListener);
+        //((Button) findViewById(R.id.take_picture)).setOnClickListener(mTakePictureListener);
+        //Log.d(TAG,"...instantiateButtons");
         
-        //set info to what we know already
-        firstName.setText(firstNameIn);
-        lastName.setText(lastNameIn);
-        password.setText(passwordIn);
-        Log.d(TAG,"...setTexts with incoming name/pw");
+        //display name and profile info
+        Resources res = getResources();
+        TextView greets = (TextView)findViewById(R.id.greeting);
+        greets.setText(String.format(res.getString(R.string.greeting), firstNameIn, lastNameIn));
+        
+        TextView fname = (TextView)findViewById(R.id.first_name);
+        fname.setText(String.format(res.getString(R.string.profile_first_name), firstNameIn));
+        
+        TextView lname = (TextView)findViewById(R.id.last_name);
+        lname.setText(String.format(res.getString(R.string.profile_last_name), lastNameIn));
+        
+        TextView school = (TextView)findViewById(R.id.school_name);
+        school.setText(String.format(res.getString(R.string.profile_school_name), "from DB"));
+        
+        TextView teacher = (TextView)findViewById(R.id.teacher_name);
+        teacher.setText(String.format(res.getString(R.string.profile_teacher_name), "from DB"));
+        
+        TextView classid = (TextView)findViewById(R.id.class_id);
+        classid.setText(String.format(res.getString(R.string.profile_classid), classIdIn));
+        
+        TextView mmass = (TextView)findViewById(R.id.mass);
+        mmass.setText(String.format(res.getString(R.string.profile_mass), massIn));
+        
+        TextView memail = (TextView)findViewById(R.id.email);
+        memail.setText(String.format(res.getString(R.string.profile_email), emailIn));
+        
+        TextView mpass = (TextView)findViewById(R.id.password);
+        mpass.setText(String.format(res.getString(R.string.profile_password), passwordIn));
+        
+        TextView mRfid = (TextView)findViewById(R.id.rfid);
+        mRfid.setText(String.format(res.getString(R.string.profile_rfid), rfidIn));
+
+        Log.d(TAG,"...Profile Info");
     }
 
-    /**
-     * Called when the activity is about to start interacting with the user.
-     */
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG,"...super.onResume()");
     }
 
-    /**
-     * Called when your activity's options menu needs to be created.
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-
-        // We are going to create two menus. Note that we assign them
-        // unique integer IDs, labels from our string resources, and
-        // given them shortcuts.
-        menu.add(0, BACK_ID, 0, R.string.back).setShortcut('0', 'b');
-        menu.add(0, CLEAR_ID, 0, R.string.clear).setShortcut('1', 'c');
+        //menu.add(0, BACK_ID, 0, R.string.back).setShortcut('0', 'b');
+        menu.add(0, QUIT_ID, 0, R.string.quit).setShortcut('0', 'b');
 
         return true;
     }
 
-    /**
-     * Called right before your activity's option menu is displayed.
-     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
         // Before showing the menu, we need to decide whether the clear
         // item is enabled depending on whether there is text to clear.
-        menu.findItem(CLEAR_ID).setVisible(firstName.getText().length() > 0);
-        menu.findItem(CLEAR_ID).setVisible(lastName.getText().length() > 0);
-        menu.findItem(CLEAR_ID).setVisible(password.getText().length() > 0);
+        //menu.findItem(CLEAR_ID).setVisible(firstName.getText().length() > 0);
+        //menu.findItem(CLEAR_ID).setVisible(lastName.getText().length() > 0);
+        //menu.findItem(CLEAR_ID).setVisible(password.getText().length() > 0);
 
         return true;
     }
@@ -161,10 +171,8 @@ public class ProfileActivity extends Activity {
         case BACK_ID:
             finish();
             return true;
-        case CLEAR_ID:
-        	lastName.setText("");
-            firstName.setText("");
-            password.setText("");
+        case QUIT_ID:
+        	finish();
             return true;
         }
 
@@ -173,41 +181,21 @@ public class ProfileActivity extends Activity {
     
     OnClickListener mTakePictureListener = new OnClickListener(){
     	public void onClick(View v) {
-    		Log.d(TAG,"...mTakePictureListener onClick");
-    		Intent myIntent = new Intent();
-    		//Intent myIntent = new Intent(ProfileActivity.this, CameraActivity.class);
-    		Log.d(TAG,"...createIntent");
-    		myIntent.setClass(ProfileActivity.this, CameraActivity.class);
-    		//ProfileActivity.this.startActivity(myIntent);
-    		startActivityForResult(myIntent, 0);
-    		Log.d(TAG,"...startActivity");
-    		//Intent myIntent = new Intent(LoginActivity.this, ProfileActivity.class);
-    		//LoginActivity.this.startActivity(myIntent.putExtra("something","another"));
-    		//	private ProfileActivity myProfile;
-    		//	public void onClick(View v){
-    		//		myProfile = new ProfileActivity(firstName, lastName, password);
+    	
     	}
     };
     	
-       
-
-    /**
-     * A call-back for when the user presses the back button.
-     */
     OnClickListener mBackListener = new OnClickListener() {
         public void onClick(View v) {
             finish();
         }
     };
 
-    /**
-     * A call-back for when the user presses the clear button.
-     */
     OnClickListener mClearListener = new OnClickListener() {
         public void onClick(View v) {
-        	lastName.setText("");
-            firstName.setText("");
-            password.setText("");
+        	//lastName.setText("");
+           // firstName.setText("");
+            //password.setText("");
         }
     };      
     
@@ -244,4 +232,5 @@ public class ProfileActivity extends Activity {
     }
 }
     
+
 

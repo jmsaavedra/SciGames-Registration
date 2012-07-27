@@ -20,102 +20,112 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp" >
 
-    <EditText
-        android:id="@+id/first_name"
-        android:layout_width="200dip"
-        android:layout_height="50dip"
-        android:layout_marginLeft="400dip"
-        android:layout_marginTop="150dip"
-        android:ems="10"
-        android:freezesText="true"
-        android:hint="@string/first_name"
-        android:imeOptions="actionNext"
-        android:inputType="textPersonName|textCapWords|textNoSuggestions" />
-    <!-- <requestFocus /> -->
-
-    <EditText
-        android:id="@+id/last_name"
-        android:layout_width="200dip"
-        android:layout_height="50dip"
-        android:layout_above="@+id/password"
-        android:layout_alignBaseline="@+id/first_name"
-        android:layout_alignBottom="@+id/first_name"
-        android:layout_toRightOf="@+id/first_name"
-        android:ems="10"
-        android:freezesText="true"
-        android:hint="@string/last_name"
-        android:imeOptions="actionNext"
-        android:inputType="textPersonName|textCapWords|textNoSuggestions" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="400dp"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@+id/first_name"
-        android:layout_alignRight="@+id/last_name"
-        android:layout_below="@+id/first_name"
-        android:layout_marginBottom="50dp"
-        android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textEmailAddress" />
-    <!--
-        android:background="@drawable/obama" 
-        android:layout_marginLeft ="5dp"
-    -->
-
-    <Button
-        android:id="@+id/clear"
-        style="@style/ActionButton"
-        android:layout_marginLeft="35dp"
-        android:text="@string/clear"
-        android:textColor="@color/red" />
-
     <ImageView
         android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/clear"
-        android:layout_alignRight="@+id/last_name"
-        android:layout_toRightOf="@+id/clear"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="230dp"
+        android:layout_marginLeft="482dp"
         android:contentDescription="@string/logo"
         android:src="@drawable/violet" />
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+        android:id="@+id/rfid"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="66dp"
-        android:text="PROFILE_PAGE"
+        android:layout_centerVertical="true"
+        android:text="@string/profile_rfid"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/password"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rfid"
+        android:layout_centerVertical="true"
+        android:text="@string/profile_password"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/password"
+        android:text="@string/profile_email"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/mass"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/email"
+        android:text="@string/profile_mass"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/class_id"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mass"
+        android:layout_alignLeft="@+id/email"
+        android:text="@string/profile_classid"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/teacher_name"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/class_id"
+        android:layout_alignLeft="@+id/mass"
+        android:text="@string/profile_teacher_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/school_name"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/teacher_name"
+        android:layout_alignLeft="@+id/teacher_name"
+        android:text="@string/profile_school_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/last_name"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/school_name"
+        android:layout_alignLeft="@+id/class_id"
+        android:text="@string/profile_last_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/first_name"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/last_name"
+        android:layout_alignLeft="@+id/last_name"
+        android:text="@string/profile_first_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_alignTop="@+id/first_name"
-        android:text="Large Text"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/school_name"
+        android:layout_marginTop="28dp"
+        android:text="@string/greeting"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/back"
-        style="@style/ActionButton"
-        android:layout_alignLeft="@+id/image"
-        android:layout_below="@+id/password"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="150dp"
-        android:text="@string/back" />
-
-    <Button
-        android:id="@+id/take_picture"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_marginLeft="128dp"
-        android:layout_toRightOf="@+id/image"
-        android:text="@string/take_picture" />
+    <TextView
+        android:id="@+id/sentence1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/password"
+        android:layout_below="@+id/greeting"
+        android:layout_marginTop="29dp"
+        android:text="@string/profile_sentence1"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

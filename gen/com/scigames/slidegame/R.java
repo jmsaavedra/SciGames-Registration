@@ -25,32 +25,36 @@ public final class R {
         public static final int violet=0x7f020002;
     }
     public static final class id {
-        public static final int back=0x7f07000e;
-        public static final int bracelet_id=0x7f070015;
+        public static final int back=0x7f070018;
+        public static final int bracelet_id=0x7f07001c;
         public static final int button1=0x7f070006;
+        public static final int class_id=0x7f07000a;
         public static final int clear=0x7f070000;
-        public static final int continue_button=0x7f070011;
+        public static final int continue_button=0x7f070017;
         public static final int done=0x7f070004;
-        public static final int email=0x7f070019;
+        public static final int email=0x7f070010;
         public static final int first_name=0x7f070007;
-        public static final int greeting=0x7f070016;
+        public static final int greeting=0x7f070014;
         public static final int image=0x7f070001;
         public static final int imageView1=0x7f070005;
-        public static final int instructions=0x7f070013;
+        public static final int instructions=0x7f07001a;
         public static final int last_name=0x7f070008;
-        public static final int login_button=0x7f07000a;
-        public static final int mass=0x7f070017;
-        public static final int notascigamersentence=0x7f07000b;
+        public static final int login_button=0x7f07000b;
+        public static final int mass=0x7f070011;
+        public static final int notascigamersentence=0x7f07000c;
         public static final int password=0x7f070009;
-        public static final int register=0x7f07000c;
-        public static final int scan=0x7f070014;
-        public static final int take_pic=0x7f070018;
-        public static final int take_picture=0x7f07000f;
-        public static final int tell_us=0x7f070010;
+        public static final int register=0x7f07000d;
+        public static final int rfid=0x7f07000f;
+        public static final int scan=0x7f07001b;
+        public static final int school_name=0x7f070013;
+        public static final int sentence1=0x7f070015;
+        public static final int take_pic=0x7f07001d;
+        public static final int teacher_name=0x7f070012;
+        public static final int tell_us=0x7f070016;
         public static final int textView1=0x7f070002;
         public static final int textView2=0x7f070003;
-        public static final int title=0x7f070012;
-        public static final int welcome=0x7f07000d;
+        public static final int title=0x7f070019;
+        public static final int welcome=0x7f07000e;
     }
     public static final class layout {
         public static final int camera=0x7f030000;
@@ -68,6 +72,7 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int back=0x7f050002;
         public static final int bracelet_id=0x7f05000e;
+        public static final int class_id=0x7f050029;
         public static final int clear=0x7f050003;
         public static final int continue_button=0x7f050008;
         public static final int done=0x7f050006;
@@ -76,17 +81,18 @@ public final class R {
         /**  Text Fields 
          */
         public static final int first_name=0x7f05000b;
-        public static final int greeting=0x7f05001b;
+        public static final int greeting=0x7f05001c;
+        public static final int img_descrip=0x7f05001b;
         public static final int last_name=0x7f05000c;
         /**  Buttons 
          */
         public static final int log_in=0x7f050001;
         /**  Place Holders 
          */
-        public static final int logo=0x7f05001c;
+        public static final int logo=0x7f050027;
         /**  This is a complex string containing style runs. 
          */
-        public static final int main_label=0x7f05001d;
+        public static final int main_label=0x7f050028;
         public static final int mass=0x7f05000f;
         public static final int mass_instructions=0x7f050018;
         public static final int mass_scan_button=0x7f05000a;
@@ -96,6 +102,18 @@ public final class R {
         public static final int photo_instructions=0x7f050019;
         public static final int photo_title=0x7f050015;
         public static final int please_register=0x7f050007;
+        public static final int profile_classid=0x7f050022;
+        public static final int profile_email=0x7f050024;
+        public static final int profile_first_name=0x7f05001e;
+        public static final int profile_last_name=0x7f05001f;
+        public static final int profile_mass=0x7f050023;
+        public static final int profile_password=0x7f050025;
+        public static final int profile_rfid=0x7f050026;
+        public static final int profile_school_name=0x7f050020;
+        /**   Profile Page 
+         */
+        public static final int profile_sentence1=0x7f05001d;
+        public static final int profile_teacher_name=0x7f050021;
         public static final int quit=0x7f050004;
         public static final int rfid_instructions=0x7f050017;
         public static final int rfid_scan_button=0x7f050009;

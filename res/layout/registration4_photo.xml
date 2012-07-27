@@ -24,16 +24,6 @@
         android:background="@drawable/obama" 
         android:layout_marginLeft ="5dp"
     -->
-
-    <Button
-        android:id="@+id/back"
-        style="@style/ActionButton"
-        android:layout_alignLeft="@+id/continue_button"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="63dp"
-        android:text="@string/back"
-        android:textColor="@color/lightGray" />
-
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -43,8 +33,8 @@
         android:layout_marginTop="52dp"
         android:text="@string/photo_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
+    
+     <TextView
         android:id="@+id/instructions"
         android:layout_width="600dp"
         android:layout_height="wrap_content"
@@ -54,7 +44,25 @@
         android:layout_toRightOf="@+id/title"
         android:text="@string/photo_instructions"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+    
+    <Button
+        android:id="@+id/take_pic"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/continue_button"
+        android:layout_alignTop="@+id/imageView1"
+        android:layout_marginTop="61dp"
+        android:text="@string/take_picture" /> 
+        
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="640dp"
+        android:layout_height="480dp"
+        android:layout_alignBottom="@+id/back"
+        android:layout_alignLeft="@+id/instructions"
+        android:layout_marginLeft="185dp" 
+        android:contentDescription="@string/img_descrip"/>
+    
     <Button
         android:id="@+id/continue_button"
         android:layout_width="200dp"
@@ -75,22 +83,14 @@
         android:text="@string/greeting"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     -->
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="640dp"
-        android:layout_height="480dp"
-        android:layout_alignBottom="@+id/back"
-        android:layout_alignLeft="@+id/instructions"
-        android:layout_marginLeft="185dp" />
-
+  
     <Button
-        android:id="@+id/take_pic"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:id="@+id/back"
+        style="@style/ActionButton"
         android:layout_alignLeft="@+id/continue_button"
-        android:layout_alignTop="@+id/imageView1"
-        android:layout_marginTop="61dp"
-        android:text="@string/take_picture" />
-
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="63dp"
+        android:text="@string/back"
+        android:textColor="@color/lightGray" />
+    
 </RelativeLayout>

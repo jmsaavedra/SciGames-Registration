@@ -25,9 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/clear"
+        
         android:layout_marginRight="21dp"
-        android:layout_marginTop="39dp"
+		android:layout_marginLeft="50dp"
+        android:layout_marginTop="100dp"
+        android:lineSpacingExtra="25dp"
         android:text="@string/tell_us_about_you"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
@@ -35,8 +37,8 @@
         android:id="@+id/first_name"
         android:layout_width="200dip"
         android:layout_height="50dip"
-        android:layout_marginLeft="400dip"
-        android:layout_marginTop="225dip"
+        android:layout_marginLeft="170dip"
+        android:layout_marginTop="450dip"
         android:ems="10"
         android:freezesText="true"
         android:hint="@string/first_name"

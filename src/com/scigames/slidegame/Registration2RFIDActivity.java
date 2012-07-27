@@ -62,7 +62,8 @@ public class Registration2RFIDActivity extends Activity {
 
     private String firstNameIn = "FNAME";
     private String lastNameIn = "LNAME";
-    //private String passwordIn = "PWORD";;
+    private String classIdIn = "CLASSID";
+    private String passwordIn = "PASSWORD";
     
     private EditText firstName;
     private EditText lastName;
@@ -92,7 +93,8 @@ public class Registration2RFIDActivity extends Activity {
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
     	lastNameIn = i.getStringExtra("lName");
-    	//passwordIn = i.getStringExtra("pword");
+    	classIdIn = i.getStringExtra("mClass");
+    	passwordIn = i.getStringExtra("mPass");
     	Log.d(TAG,"...getStringExtra:");
     	Log.d(TAG,firstNameIn+lastNameIn);
     	
@@ -105,17 +107,19 @@ public class Registration2RFIDActivity extends Activity {
         // want to do various programmatic things with it.
         braceletId = (EditText) findViewById(R.id.bracelet_id);
         /* to hide the keyboard on launch, then open when tap in firstname field */
+        Log.d(TAG,"...braceletId EditText set");
         braceletId.setInputType(InputType.TYPE_NULL);
+        Log.d(TAG,"...setInputType");
         braceletId.setOnTouchListener(new View.OnTouchListener() {
-  			@Override
+  			//@Override
 			public boolean onTouch(View v, MotionEvent event) {
   			braceletId.setInputType(InputType.TYPE_CLASS_TEXT);
   			braceletId.onTouchEvent(event); // call native handler
 	        return true; // consume touch even
 			} 
         });
-        firstName = (EditText) findViewById(R.id.first_name);
-        lastName = (EditText) findViewById(R.id.last_name);
+        //firstName = (EditText) findViewById(R.id.first_name);
+        //lastName = (EditText) findViewById(R.id.last_name);
         //password = (EditText) findViewById(R.id.password);
         Log.d(TAG,"...instantiateEditTexts");
         
@@ -221,11 +225,18 @@ public class Registration2RFIDActivity extends Activity {
     OnClickListener mContinueButtonListener = new OnClickListener(){
     	public void onClick(View v) {
     		Log.d(TAG,"...mContinueButtonListener onClick");
+    		
+    		//if "registration status"
+    		//== 3, directly to profile page
+    		//== 2, to Mass page, then Photo page, then profile page
+    		//== 1, to Photo page, then profile page
        		Intent i = new Intent(Registration2RFIDActivity.this, Registration3MassActivity.class);
     		Log.d(TAG,"new Intent");
     		i.putExtra("fName",firstNameIn);
     		i.putExtra("lName",lastNameIn);
-    		//i.putExtra("pword",password.getText().toString());
+			i.putExtra("mClass", classIdIn);
+			i.putExtra("mPass", passwordIn);
+			i.putExtra("mRfid", braceletId.getText().toString());
     		Log.d(TAG,"startActivity...");
     		Registration2RFIDActivity.this.startActivity(i);
     		Log.d(TAG,"...startActivity");
@@ -247,7 +258,6 @@ public class Registration2RFIDActivity extends Activity {
     /**
      * A call-back for when the user presses the clear button.
      */
-
     OnClickListener mScanButtonListener = new OnClickListener() {
         public void onClick(View v) {
         	Log.d(TAG,"...mScanButtonListener onClick");
@@ -324,7 +334,6 @@ public class Registration2RFIDActivity extends Activity {
 	    	   	//call setText here
 	        }
 		};
-
     };      
     
 	// progress bar simulator... will hold ADK stuff...
