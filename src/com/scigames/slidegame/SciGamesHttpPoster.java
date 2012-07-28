@@ -40,6 +40,8 @@ import org.json.JSONObject;
 import com.scigames.slidegame.R;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 //import android.net.Uri;
@@ -68,265 +70,41 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     private String secondKey = "";
     private String firstValue = "";
     private String secondValue = "";
+    private String thirdKey = "";
+    private String thirdValue = "";
     private String thisPostAddress = "";
    // private String photoUri;
     public JSONObject serverResponse = null;
+    private Exception exception;
     
     static InputStream is = null;
     static JSONObject jObj = null;
     static String json = "";
-
-    public SciGamesHttpPoster(String addr){
+    
+    static public Activity MyActivity;
+    SciGamesListener listener;
+    
+    public String failureReason = ""; //holds any explanations for failure
+    
+    SciGamesHttpPoster(Activity a, String addr){
     	thisPostAddress = addr;
-
+    	MyActivity = a;
+    	Log.d(TAG, "----"+MyActivity);
     }
     
-  //  @Override
-   // public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        Log.d(TAG, "...super.onCreate");
-//        setContentView(R.layout.camera);
-//        this.imageView = (ImageView)this.findViewById(R.id.imageView1);
-//        Button photoButton = (Button) this.findViewById(R.id.button1);
-//        photoButton.setOnClickListener(new View.OnClickListener() {
-
-           // @Override
-//            public void onClick(View v) {
-//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
-//                startActivityForResult(cameraIntent, CAMERA_REQUEST); 
-//            }
-//        });
-        
- //   }
-
-    
-    public JSONObject newPostData(String key1, String val1, String key2, String val2){
-    	
-    	firstKey = key1; 
-    	firstValue = val1;
-    	secondKey = key2; 
-    	secondValue = val2;
-        // Making HTTP request
-        try {
-            // defaultHttpClient
-            DefaultHttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(thisPostAddress);
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            //String thisUn = (firstName.getText().toString())+"_"+(lastName.getText().toString())+"_"+(classId.getText().toString());
-            //thisUn = thisUn.toLowerCase();
-            //String thisPw = password.getText().toString();
-            Log.d(TAG, "values: ");
-            Log.d(TAG, firstKey + ": " +firstValue + "   "+secondKey+": "+secondValue);
-            Log.d(TAG, secondValue);
-            nameValuePairs.add(new BasicNameValuePair(firstKey, firstValue));
-            nameValuePairs.add(new BasicNameValuePair(secondKey, secondValue));
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            Log.d(TAG, "...setEntity: ");
-            
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            is = httpEntity.getContent();           
- 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
- 
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    is, "iso-8859-1"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "n");
-            }
-            is.close();
-            json = sb.toString();
-        } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
-        }
- 
-        // try parse the string to a JSON object
-        try {
-            jObj = new JSONObject(json);
-        } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
-        }
- 
-        // return JSON String
-        return jObj;
- 
-    }
-    	
-    
-
-    // see http://androidsnippets.com/executing-a-http-post-request-with-httpclient
-    public JSONObject postData(String key1, String val1, String key2, String val2)   {
-    	
-    	firstKey = key1; 
-    	firstValue = val1;
-    	secondKey = key2; 
-    	secondValue = val2;
-    	
-    	Log.d(TAG, "...postData()");
-        // Create a new HttpClient and Post Header
-    	
-        //JSONArray finalResult = null;
-		new Thread (new Runnable() {
-			
-			public void run() {
-		        //serverResponse = execute();
-//		        	firstKey = key1; 
-//		        	firstValue = val1;
-//		        	secondKey = key2; 
-//		        	secondValue = val2;
-				// Making HTTP request
-				try {
-				    // defaultHttpClient
-				    DefaultHttpClient httpClient = new DefaultHttpClient();
-				    HttpPost httpPost = new HttpPost(thisPostAddress);
-				    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-				    //String thisUn = (firstName.getText().toString())+"_"+(lastName.getText().toString())+"_"+(classId.getText().toString());
-				    //thisUn = thisUn.toLowerCase();
-				    //String thisPw = password.getText().toString();
-				    Log.d(TAG, "values: ");
-				    Log.d(TAG, firstKey + ": " +firstValue + "   "+secondKey+": "+secondValue);
-				    Log.d(TAG, secondValue);
-				    nameValuePairs.add(new BasicNameValuePair(firstKey, firstValue));
-				    nameValuePairs.add(new BasicNameValuePair(secondKey, secondValue));
-				    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				    Log.d(TAG, "...setEntity: ");
-				    
-				    HttpResponse httpResponse = httpClient.execute(httpPost);
-				    HttpEntity httpEntity = httpResponse.getEntity();
-				    is = httpEntity.getContent();           
-    
-				} catch (UnsupportedEncodingException e) {
-				    e.printStackTrace();
-				} catch (ClientProtocolException e) {
-				    e.printStackTrace();
-				} catch (IOException e) {
-				    e.printStackTrace();
-				}
-    
-				try {
-				    BufferedReader reader = new BufferedReader(new InputStreamReader(
-				            is, "iso-8859-1"), 8);
-				    StringBuilder sb = new StringBuilder();
-				    String line = null;
-				    while ((line = reader.readLine()) != null) {
-				        sb.append(line + "n");
-				    }
-				    is.close();
-				    json = sb.toString();
-				} catch (Exception e) {
-				    Log.e("Buffer Error", "Error converting result " + e.toString());
-				}
-    
-				// try parse the string to a JSON object
-				try {
-				    jObj = new JSONObject(json);
-				} catch (JSONException e) {
-				    Log.e("JSON Parser", "Error parsing data " + e.toString());
-				}
-		        
-			}
-			
-		}).start(); 	
-		//return jObject;
-       // Log.d(TAG, "last return...");
-       // JSONObject thisResponse = null;
-       // if(serverResponse == null) Log.d(TAG, "CHECK YOUR INTERNET CONNECTION!");
-		return jObj;
-    }
-    
-//    private JSONObject execute() throws IllegalStateException, IOException, JSONException{
-//        HttpClient httpclient = new DefaultHttpClient();
-//        HttpPost httppost = new HttpPost(thisPostAddress);
-//        Log.d(TAG, "...create POST");
-//        // Add your data
-//        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-//        //String thisUn = (firstName.getText().toString())+"_"+(lastName.getText().toString())+"_"+(classId.getText().toString());
-//        //thisUn = thisUn.toLowerCase();
-//        //String thisPw = password.getText().toString();
-//        Log.d(TAG, "values: ");
-//        Log.d(TAG, firstKey + ": " +firstValue + "   "+secondKey+": "+secondValue);
-//        Log.d(TAG, secondValue);
-//        nameValuePairs.add(new BasicNameValuePair(firstKey, firstValue));
-//        nameValuePairs.add(new BasicNameValuePair(secondKey, secondValue));
-//        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//        Log.d(TAG, "...setEntity: ");
-//        Log.d(TAG, httppost.toString());
-//        // Execute HTTP Post Request
-//        HttpResponse response = httpclient.execute(httppost);
-//        Log.d(TAG, "...execute");
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
-//        Log.d(TAG, "...BufferedReader");
-//        Log.d(TAG, reader.toString());
-//        String json = reader.readLine();
-//        //Log.d(TAG, json);
-//        JSONObject thisResponse = new JSONObject(json);
-//        Log.d(TAG, thisResponse.toString());
-//        Log.d(TAG, "...jsonObject");
-//        Log.d(TAG, "first return...");
-//        return thisResponse;
-//    }
-//    
-    
-    
-    
-    public JSONObject postDataOld(String key1, String val1, String key2, String val2) throws JSONException {
-    	firstKey = key1; 
-    	firstValue = val1;
-    	secondKey = key2; 
-    	secondValue = val2;
-    	
-    	JSONObject thisResponse=null;
-    	Log.d(TAG, "...postDataOld()");
-        // Create a new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(thisPostAddress);//("http://requestb.in/xurt8kxu");
-        Log.d(TAG, "...create POST");
-        try {
-            // Add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair(firstKey, firstValue));
-            nameValuePairs.add(new BasicNameValuePair(secondKey, secondValue));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            Log.d(TAG, "...setEntity");
-            // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(httppost);
-            Log.d(TAG, "...executed");
-            Log.d(TAG, response.toString());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
-            Log.d(TAG, "...BufferedReader");
-            //Log.d(TAG, reader.toString());
-            String json = reader.readLine();
-            Log.d(TAG, json);
-            thisResponse = new JSONObject(json);
-            Log.d(TAG, thisResponse.toString());
-            Log.d(TAG, "...jsonObject");
-            Log.d(TAG, "first return...");
-            return thisResponse;
-            
-        } catch (ClientProtocolException e) {
-        	Log.d(TAG, e.toString());
-        } catch (IOException e) {
-        	Log.d(TAG, e.toString());
-        }
-        return thisResponse;
-    } 
-    // see http://androidsnippets.com/executing-a-http-post-request-with-httpclient
-
 	public void run() {
 		// TODO Auto-generated method stub
-		
 	}
 	
-	private Exception exception;
+    public void setOnResultsListener(SciGamesListener listener) {
+        this.listener = listener;
+    }
+	
+    protected void onPreExecute (){
+//    	ProgressDialog dialog ;
+//    	dialog = ProgressDialog.show(Activity.activity ,"title","message");
+   }
+	
 	@Override
 	protected JSONObject doInBackground (String... keyVals){
 		
@@ -334,11 +112,17 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     	firstValue 	= keyVals[1];
     	secondKey	= keyVals[2]; 
     	secondValue = keyVals[3];
-    	//thisPostAddress = UrlKeyVals[4];
+    	if(keyVals.length > 4){
+	    	thirdKey	= keyVals[4]; 
+	    	thirdValue  = keyVals[5];
+    	}
+    	
+    	Log.d(TAG, "keyVals: ");
+    	Log.d(TAG, firstKey +":"+ firstValue +" , "+ secondKey+":"+ secondValue);
     	
     	try{
         	JSONObject thisResponse=null;
-        	Log.d(TAG, "...postDataOld()");
+        	Log.d(TAG, "...doInBackground (String... keyVals)");
             // Create a new HttpClient and Post Header
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(thisPostAddress);//("http://requestb.in/xurt8kxu");
@@ -347,6 +131,9 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair(firstKey, firstValue));
             nameValuePairs.add(new BasicNameValuePair(secondKey, secondValue));
+            if(keyVals.length > 4){
+            	nameValuePairs.add(new BasicNameValuePair(thirdKey, thirdValue));
+            }
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             Log.d(TAG, "...setEntity");
             // Execute HTTP Post Request
@@ -371,16 +158,45 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
         }
 	}
 	
-    protected void onPostExecute(JSONObject response) {
-        // TODO: check this.exception 
-        // TODO: do something with the feed
+    protected void onPostExecute(JSONObject response){
+    
+    	this.serverResponse = response;
     	
-		if((response).has("error")){
-			Log.d(TAG, "BAD LOGIN");
-
-		} else {
+    	if (MyActivity.toString().startsWith("com.scigames.slidegame.LoginActivity")){
+    		if(checkLoginFailed(response)){
+    			Log.d(TAG, "BAD LOGIN: ");
+    			listener.failedQuery(failureReason);
+    			Log.d(TAG, failureReason);
+    		} else {
+    			String[] parsedLoginInfo;
+    			Log.d(TAG, "GOOD LOGIN: ");
+				try {
+					parsedLoginInfo = parseThisLogin(response);
+					listener.onResultsSucceeded(parsedLoginInfo);
+				} catch (JSONException e) {
+					Log.d(TAG, "failed at parsedThisLogin");
+					e.printStackTrace();
+				}
+    		}
+    	}
+    	
+//		if((serverResponse).has("error")){
+//			Log.d(TAG, "BAD LOGIN");
+//
+//		} else {
+//			Log.d(TAG,"GOOD LOGIN");
+//			Activity thisActivity;
+			//thisActivity = SciGamesHttpPoster.MyActivity.getParent();
 			
-			Log.d(TAG,"GOOD LOGIN");
+			//((Object) thisActivity).parseJson(response);
+			
+//			try {
+//				parseResponse(serverResponse);
+//			} catch (JSONException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+
 			
 //			try {
 //				Log.d(TAG,(serverResponse.get("first_name")).toString());
@@ -399,6 +215,114 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 //	    		LoginActivity.this.startActivity(i);
 //	    		Log.d(TAG,"...startActivity");
 			//}
-		}
+		//}
     }
+    
+    public boolean checkLoginFailed(JSONObject response){
+		if((response).has("error")){
+			Log.d(TAG, "BAD LOGIN");
+			//TODO: find the reason login failed
+			failureReason = "either bad name or bad password";
+			return true;
+		} else return false;
+    }
+    
+    public String[] parseThisLogin(JSONObject response) throws JSONException{
+    	
+    	Log.d(TAG, "parsed data:");	
+		JSONObject visits = null;
+		JSONObject visitId = null;
+		String thisVisitId = null;
+		
+		JSONObject student = null;
+		JSONObject studentId = null;
+		String thisStudentId = null;
+		
+		if(serverResponse.has("visit")){
+			visits = serverResponse.getJSONObject("visit");
+			visitId = visits.getJSONObject("_id");
+			thisVisitId = visitId.getString("$id");
+			
+			Log.d(TAG, "thisVisit: " + thisVisitId);
+		}
+		
+		student = serverResponse.getJSONObject("student");
+		studentId = student.getJSONObject("_id");
+		thisStudentId = studentId.getString("$id");
+		
+		Log.d(TAG, "thisStudentId: " + thisStudentId);
+		
+		String[] infoToSend = {thisStudentId, thisVisitId};
+		return infoToSend;
+    }
+    
+//	public JSONObject getServerResponse(){
+//        return this.serverResponse;
+//    }
 }
+
+
+
+//  public JSONObject newPostData(String key1, String val1, String key2, String val2){
+//	
+//	firstKey = key1; 
+//	firstValue = val1;
+//	secondKey = key2; 
+//	secondValue = val2;
+//    // Making HTTP request
+//    try {
+//        // defaultHttpClient
+//        DefaultHttpClient httpClient = new DefaultHttpClient();
+//        HttpPost httpPost = new HttpPost(thisPostAddress);
+//        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+//        //String thisUn = (firstName.getText().toString())+"_"+(lastName.getText().toString())+"_"+(classId.getText().toString());
+//        //thisUn = thisUn.toLowerCase();
+//        //String thisPw = password.getText().toString();
+//        Log.d(TAG, "values: ");
+//        Log.d(TAG, firstKey + ": " +firstValue + "   "+secondKey+": "+secondValue);
+//        Log.d(TAG, secondValue);
+//        nameValuePairs.add(new BasicNameValuePair(firstKey, firstValue));
+//        nameValuePairs.add(new BasicNameValuePair(secondKey, secondValue));
+//        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//        Log.d(TAG, "...setEntity: ");
+//        
+//        HttpResponse httpResponse = httpClient.execute(httpPost);
+//        HttpEntity httpEntity = httpResponse.getEntity();
+//        is = httpEntity.getContent();           
+//
+//    } catch (UnsupportedEncodingException e) {
+//        e.printStackTrace();
+//    } catch (ClientProtocolException e) {
+//        e.printStackTrace();
+//    } catch (IOException e) {
+//        e.printStackTrace();
+//    }
+//
+//    try {
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                is, "iso-8859-1"), 8);
+//        StringBuilder sb = new StringBuilder();
+//        String line = null;
+//        while ((line = reader.readLine()) != null) {
+//            sb.append(line + "n");
+//        }
+//        is.close();
+//        json = sb.toString();
+//    } catch (Exception e) {
+//        Log.e("Buffer Error", "Error converting result " + e.toString());
+//    }
+//
+//    // try parse the string to a JSON object
+//    try {
+//        jObj = new JSONObject(json);
+//    } catch (JSONException e) {
+//        Log.e("JSON Parser", "Error parsing data " + e.toString());
+//    }
+//    // return JSON String
+//    return jObj;
+//}
+	
+
+
+// see http://androidsnippets.com/executing-a-http-post-request-with-httpclient    
+

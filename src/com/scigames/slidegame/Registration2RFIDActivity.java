@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.net.URI;
 */
 
+import org.json.JSONObject;
+
 import com.scigames.slidegame.R;
 
 import android.app.Activity;
@@ -31,6 +33,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 //import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,10 +63,13 @@ public class Registration2RFIDActivity extends Activity {
     static final private int BACK_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
 
-    private String firstNameIn = "FNAME";
-    private String lastNameIn = "LNAME";
+    private String visitIdIn = "FNAME";
+    private String studentIdIn = "LNAME";
     private String classIdIn = "CLASSID";
     private String passwordIn = "PASSWORD";
+    
+    private String firstNameIn = "test";
+    private String lastNameIn = "test";
     
     private EditText firstName;
     private EditText lastName;
@@ -91,12 +97,12 @@ public class Registration2RFIDActivity extends Activity {
     	
         Intent i = getIntent();
         Log.d(TAG,"getIntent");
-    	firstNameIn = i.getStringExtra("fName");
-    	lastNameIn = i.getStringExtra("lName");
-    	classIdIn = i.getStringExtra("mClass");
-    	passwordIn = i.getStringExtra("mPass");
+    	visitIdIn = i.getStringExtra("visitId");
+    	studentIdIn = i.getStringExtra("studentId");
+    	//classIdIn = i.getStringExtra("mClass");
+    	//passwordIn = i.getStringExtra("mPass");
     	Log.d(TAG,"...getStringExtra:");
-    	Log.d(TAG,firstNameIn+lastNameIn);
+    	//Log.d(TAG,firstNameIn+lastNameIn);
     	
     	
         // Inflate our UI from its XML layout description.
@@ -123,10 +129,10 @@ public class Registration2RFIDActivity extends Activity {
         //password = (EditText) findViewById(R.id.password);
         Log.d(TAG,"...instantiateEditTexts");
         
-        Log.d(TAG,"firstNameIn:");
-        Log.d(TAG,firstNameIn);
-        Log.d(TAG,"lastNameIn:");
-        Log.d(TAG,lastNameIn);
+//        Log.d(TAG,"firstNameIn:");
+//        Log.d(TAG,firstNameIn);
+//        Log.d(TAG,"lastNameIn:");
+//        Log.d(TAG,lastNameIn);
         
         //set info to what we know already
         //lastName.setText(lastNameIn);
@@ -223,25 +229,44 @@ public class Registration2RFIDActivity extends Activity {
     }
     
     OnClickListener mContinueButtonListener = new OnClickListener(){
-    	public void onClick(View v) {
-    		Log.d(TAG,"...mContinueButtonListener onClick");
-    		
-    		//if "registration status"
-    		//== 3, directly to profile page
-    		//== 2, to Mass page, then Photo page, then profile page
-    		//== 1, to Photo page, then profile page
-       		Intent i = new Intent(Registration2RFIDActivity.this, Registration3MassActivity.class);
-    		Log.d(TAG,"new Intent");
-    		i.putExtra("fName",firstNameIn);
-    		i.putExtra("lName",lastNameIn);
-			i.putExtra("mClass", classIdIn);
-			i.putExtra("mPass", passwordIn);
-			i.putExtra("mRfid", braceletId.getText().toString());
-    		Log.d(TAG,"startActivity...");
-    		Registration2RFIDActivity.this.startActivity(i);
-    		Log.d(TAG,"...startActivity");
-    		
-    	}
+    	
+ 	   public void onClick(View v) {
+   		Log.d(TAG,"mLogInListener.onClick");
+   		//final SciGamesHttpPoster poster = new SciGamesHttpPoster("http://mysweetwebsite.com/pull/auth_student.php");
+   	    		//("http://requestb.in/rb1n8prb");
+   		AsyncTask<String, Void, JSONObject> serverResponse = null;
+			
+			String[] keyVals = {"visit_id", visitIdIn, "student_id", studentIdIn, "rfid","bitchassbitch"};
+			serverResponse = new SciGamesHttpPoster(Registration2RFIDActivity.this, "http://mysweetwebsite.com/push/new_rfid.php").execute(keyVals);
+
+			while(serverResponse == null){
+				//wait
+				int i=0;
+			}
+			Log.d(TAG,"...created serverResponse with poster.postData");
+			Log.d(TAG,"serverResponse: ");
+			Log.d(TAG, serverResponse.toString());
+   	}
+    	
+//    	public void onClick(View v) {
+//    		Log.d(TAG,"...mContinueButtonListener onClick");
+//    		
+//    		//if "registration status"
+//    		//== 3, directly to profile page
+//    		//== 2, to Mass page, then Photo page, then profile page
+//    		//== 1, to Photo page, then profile page
+//       		Intent i = new Intent(Registration2RFIDActivity.this, Registration3MassActivity.class);
+//    		Log.d(TAG,"new Intent");
+//    		i.putExtra("fName",firstNameIn);
+//    		i.putExtra("lName",lastNameIn);
+//			i.putExtra("mClass", classIdIn);
+//			i.putExtra("mPass", passwordIn);
+//			i.putExtra("mRfid", braceletId.getText().toString());
+//    		Log.d(TAG,"startActivity...");
+//    		Registration2RFIDActivity.this.startActivity(i);
+//    		Log.d(TAG,"...startActivity");
+//    		
+//    	}
     };
     	
        

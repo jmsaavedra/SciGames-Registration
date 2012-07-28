@@ -42,6 +42,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 //import android.view.KeyEvent;
@@ -221,27 +222,44 @@ public class Registration1UserNameActivity extends Activity {
     // see http://androidsnippets.com/executing-a-http-post-request-with-httpclient
     
     OnClickListener mContinueButtonListener = new OnClickListener() {
-    	public void onClick(View v) {
-    		JSONObject serverResponse = null;
-    		//postData();
-    		Log.d(TAG,"...mContinueButtonListener onClick");
-    		SciGamesHttpPoster poster = new SciGamesHttpPoster("http://mysweetwebsite.com/push/register_player.php");
-    		serverResponse = poster.newPostData("first_name", firstName.getText().toString(), "last_name",lastName.getText().toString());
+ 	   public void onClick(View v) {
+   		Log.d(TAG,"mLogInListener.onClick");
+   		//final SciGamesHttpPoster poster = new SciGamesHttpPoster("http://mysweetwebsite.com/pull/auth_student.php");
+   	    		//("http://requestb.in/rb1n8prb");
+   		AsyncTask<String, Void, JSONObject> serverResponse = null;
+			
+			String[] keyVals = {"first_name", firstName.getText().toString(), "last_name", lastName.getText().toString()};
+			serverResponse = new SciGamesHttpPoster(Registration1UserNameActivity.this, "http://mysweetwebsite.com/push/register_player.php").execute(keyVals);
+
+			while(serverResponse == null){
+				//wait
+				int i=0;
+			}
 			Log.d(TAG,"...created serverResponse with poster.postData");
-			//Log.d(TAG,"serverResponse: ");
-			//Log.d(TAG, serverResponse.toString());
 			Log.d(TAG,"serverResponse: ");
 			Log.d(TAG, serverResponse.toString());
-       		Intent i = new Intent(Registration1UserNameActivity.this, Registration2RFIDActivity.class);
-    		Log.d(TAG,"new Intent");
-    		i.putExtra("fName",firstName.getText().toString());
-    		i.putExtra("lName",lastName.getText().toString());
-    		i.putExtra("mPass", passwordIn);
-    		i.putExtra("mClass", classIdIn);
-    		Log.d(TAG,"startActivity...");
-    		Registration1UserNameActivity.this.startActivity(i);
-    		Log.d(TAG,"...startActivity");
-    	}
+   	}
+//    	public void onClick(View v) {
+//    		JSONObject serverResponse = null;
+//    		//postData();
+//    		Log.d(TAG,"...mContinueButtonListener onClick");
+//    		SciGamesHttpPoster poster = new SciGamesHttpPoster("http://mysweetwebsite.com/push/register_player.php");
+//    		serverResponse = poster.newPostData("first_name", firstName.getText().toString(), "last_name",lastName.getText().toString());
+//			Log.d(TAG,"...created serverResponse with poster.postData");
+//			//Log.d(TAG,"serverResponse: ");
+//			//Log.d(TAG, serverResponse.toString());
+//			Log.d(TAG,"serverResponse: ");
+//			Log.d(TAG, serverResponse.toString());
+//       		Intent i = new Intent(Registration1UserNameActivity.this, Registration2RFIDActivity.class);
+//    		Log.d(TAG,"new Intent");
+//    		i.putExtra("fName",firstName.getText().toString());
+//    		i.putExtra("lName",lastName.getText().toString());
+//    		i.putExtra("mPass", passwordIn);
+//    		i.putExtra("mClass", classIdIn);
+//    		Log.d(TAG,"startActivity...");
+//    		Registration1UserNameActivity.this.startActivity(i);
+//    		Log.d(TAG,"...startActivity");
+//    	}
     };
     	
        

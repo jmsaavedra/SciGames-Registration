@@ -58,6 +58,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * This class provides a basic demonstration of how to write an Android
@@ -65,7 +66,7 @@ import android.widget.EditText;
  * displays and edits some internal text.
  */
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements SciGamesListener{
 	    
     static final private int QUIT_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
@@ -77,6 +78,10 @@ public class LoginActivity extends Activity {
     private static String TAG = "LoginActivity";
     
     ProgressDialog progressBar;
+    
+    SciGamesHttpPoster task = new SciGamesHttpPoster(LoginActivity.this,"http://mysweetwebsite.com/pull/auth_student.php");
+    
+    
 //    private int progressBarStatus = 0;
 //    private Handler progressBarHandler = new Handler();
 //    private int currProgress = 0;
@@ -116,7 +121,13 @@ public class LoginActivity extends Activity {
         ((Button) findViewById(R.id.clear)).setOnClickListener(mClearListener);
         ((Button) findViewById(R.id.login_button)).setOnClickListener(mLogInListener);
         ((Button) findViewById(R.id.register)).setOnClickListener(mRegisterListener);
+        
+        //set listener
+        task.setOnResultsListener(this);
     }
+    
+
+    
 
     /**
      * Called when the activity is about to start interacting with the user.
@@ -194,56 +205,26 @@ public class LoginActivity extends Activity {
 			thisUn = thisUn.toLowerCase();
 			String thisPw = password.getText().toString();
 			//serverResponse = poster.newPostData("un", thisUn, "pw",thisPw);
+			
 			String[] keyVals = {"un", thisUn, "pw", thisPw};
-			serverResponse = new SciGamesHttpPoster("http://mysweetwebsite.com/pull/auth_student.php").execute(keyVals);
+			//serverResponse = new SciGamesHttpPoster(LoginActivity.this,"http://mysweetwebsite.com/pull/auth_student.php").execute(keyVals);
+			serverResponse = task.execute(keyVals);
+			
 			Log.d(TAG,"...created serverResponse with poster.postData");
 			Log.d(TAG,"serverResponse: ");
 			Log.d(TAG, serverResponse.toString());
-
-			//jsonHandler.handleMessage(msg)
-//    		
-//			if((serverResponse).has("error")){
-//				Log.d(TAG, "BAD LOGIN");
-//
-//			} else {
-//				
-//				Log.d(TAG,"GOOD LOGIN");
-//				try {
-//					Log.d(TAG,(serverResponse.get("first_name")).toString());
-//					Log.d(TAG,(serverResponse.get("last_name")).toString());
-//					Log.d(TAG,(serverResponse.get("mass")).toString());
-//					
-//		    		Intent i = new Intent(LoginActivity.this, Registration2RFIDActivity.class);
-//		    		Log.d(TAG,"new Intent");
-//		    		//---- ALL OF THE FOLLOWING WILL BE REPLACED WITH MONGO ID that's passed back upon successful login.
-//		    		//i.putExtra("MongoId", mongoId);
-//		    		i.putExtra("fName", firstName.getText().toString());
-//		    		i.putExtra("lName", lastName.getText().toString());
-//		    		i.putExtra("mPass", password.getText().toString());
-//		    		i.putExtra("mClass", classId.getText().toString());
-//		    		Log.d(TAG,"startActivity...");
-//		    		LoginActivity.this.startActivity(i);
-//		    		Log.d(TAG,"...startActivity");
-		    		
-//		    		Intent i = new Intent(LoginActivity.this, Registration2RFIDActivity.class);
-//		    		Log.d(TAG,"new Intent");
-//		    		//---- ALL OF THE FOLLOWING WILL BE REPLACED WITH MONGO ID that's passed back upon successful login.
-//		    		//i.putExtra("MongoId", mongoId);
-//		    		i.putExtra("fName", firstName.getText().toString());
-//		    		i.putExtra("lName", lastName.getText().toString());
-//		    		i.putExtra("mPass", password.getText().toString());
-//		    		i.putExtra("mClass", classId.getText().toString());
-//		    		Log.d(TAG,"startActivity...");
-//		    		LoginActivity.this.startActivity(i);
-//		    		Log.d(TAG,"...startActivity");
-					
-//				} catch (JSONException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}	
-//			}
     	}
     };
+    
+	public void onResultsSucceeded(String result) {
+        Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+    }
+//    
+//    public interface Listener {
+//    	public void onUpdate(JSONObject response);
+//                                                //update is recieved from the new 
+//    	                                                //async task
+//    }
     
 
     OnClickListener mRegisterListener = new OnClickListener(){
@@ -293,172 +274,16 @@ public class LoginActivity extends Activity {
     return ret;
     }
     
-//------- OLD login connection -------
-   OnClickListener mLogInListenerOLD = new OnClickListener(){
-    	
-    	public void onClick(View v) {
-    		Log.d(TAG,"mLogInListener.onClick");
-    		final SciGamesHttpPoster poster = new SciGamesHttpPoster("http://mysweetwebsite.com/pull/auth_student.php");
-			//("http://requestb.in/rb1n8prb");//("http://mysweetwebsite.com/pull/auth_student.php");
-    			
+    //this is from the results listener interface (JsonParser)
+	public void onResultsSucceeded(String[] serverResponse) {
+		// TODO Auto-generated method stub
+		
+		Log.d(TAG, "HOLY SHIT IT WORKED");
+		
+	}
 
-        	// prepare for a progress bar dialog
-			progressBar = new ProgressDialog(v.getContext());
-			progressBar.setCancelable(true);
-			progressBar.setMessage("Logging in ...");
-			progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			progressBar.setProgress(0);
-			progressBar.setMax(100);
-			progressBar.show();
-			//reset progress bar status
-			//progressBarStatus = 0;
-			//reset currProgress
-			//currProgress = 0;
-			
-			new Thread (new Runnable() {
-				JSONObject serverResponse;
-				public void run() {
-					
-					Message msg = new Message();
-			        
-					String thisUn = (firstName.getText().toString())+"_"+(lastName.getText().toString())+"_"+(classId.getText().toString());
-					thisUn = thisUn.toLowerCase();
-					String thisPw = password.getText().toString();
-					try {
-						serverResponse = poster.postDataOld("un", thisUn, "pw",thisPw);
-					} catch (JSONException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					Log.d(TAG,"...created serverResponse with poster.postData");
-					Log.d(TAG,"serverResponse: ");
-					Log.d(TAG, serverResponse.toString());
-
-			        //jsonHandler.handleMessage(msg);
-			        
-					
-					if(serverResponse.has("error")){
-						Log.d(TAG, "BAD LOGIN");
-
-					} else {
-						
-						Log.d(TAG,"GOOD LOGIN");
-						try {
-							Log.d(TAG,(serverResponse.get("first_name")).toString());
-							Log.d(TAG,(serverResponse.get("last_name")).toString());
-							Log.d(TAG,(serverResponse.get("mass")).toString());
-							
-				    		Intent i = new Intent(LoginActivity.this, Registration2RFIDActivity.class);
-				    		Log.d(TAG,"new Intent");
-				    		//---- ALL OF THE FOLLOWING WILL BE REPLACED WITH MONGO ID that's passed back upon successful login.
-				    		//i.putExtra("MongoId", mongoId);
-				    		i.putExtra("fName", firstName.getText().toString());
-				    		i.putExtra("lName", lastName.getText().toString());
-				    		i.putExtra("mPass", password.getText().toString());
-				    		i.putExtra("mClass", classId.getText().toString());
-				    		Log.d(TAG,"startActivity...");
-				    		LoginActivity.this.startActivity(i);
-				    		Log.d(TAG,"...startActivity");
-							
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					
-//					while (progressBarStatus < 100) {
-//					  // process some tasks
-//						progressBarStatus = attemptLogin();
-//						// your computer is too fast, sleep 1 second
-//						try {
-//							Thread.sleep(10);
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-//						// Update the progress bar
-//						progressBarHandler.post(new Runnable() {
-//						
-//							public void run() {
-//								progressBar.setProgress(progressBarStatus);
-//							}
-//						});
-//					}
-					// ok, time is up
-//					if (progressBarStatus >= 100) {
-//						Log.d(TAG, "...progressBar time's up");
-//						// sleep 2 seconds, so that you can see the 100%
-//						try {
-//							Thread.sleep(2000);
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-//						Message msg = new Message();
-//				        String textTochange = serverResponseReceived;
-//				        msg.obj = textTochange;
-//				        jsonHandler.sendMessage(msg);
-//						// close the progress bar dialog
-						progressBar.dismiss();
-//						Log.d(TAG, "...progressBar.dismiss()");
-//        			}
-
-				}
-
-			}).start(); 	
-    		//---- attemptLogin();
-    		//onActivityResult:
-    		//if incorrect{
-    		//	shoot warning -- wrong pass/no name found in db;
-    		//} else{
-    		
-    		//registration state idea:
-    		//-- if 0, we have NO RFID, NO MASS, NO PHOTO,  for student
-    		//-- if 1, we have NO RFID, NO MASS for student
-    		//-- if 2, we have NO RFID, NO PHOTO for student
-    		//-- if 3, we have NO RFID for student.  -- everyone will be this each login.
-    		
-//    		Intent i = new Intent(LoginActivity.this, Registration2RFIDActivity.class);
-//    		Log.d(TAG,"new Intent");
-//    		//---- ALL OF THE FOLLOWING WILL BE REPLACED WITH MONGO ID that's passed back upon successful login.
-//    		//i.putExtra("MongoId", mongoId);
-//    		i.putExtra("fName", firstName.getText().toString());
-//    		i.putExtra("lName", lastName.getText().toString());
-//    		i.putExtra("mPass", password.getText().toString());
-//    		i.putExtra("mClass", classId.getText().toString());
-//    		Log.d(TAG,"startActivity...");
-//    		LoginActivity.this.startActivity(i);
-//    		Log.d(TAG,"...startActivity");
-    	}
-    	
-    };
-
-    
-	static Handler jsonHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg){
-        	//String thisResponse = (String)msg.obj;	        
-    	   	//call setText here
-		try {
-			Log.d(TAG,"try...");
-			JSONObject data= new JSONObject(msg.toString());
-			if(data.has("error")){
-				Log.d(TAG, "BAD LOGIN");
-			} else {
-				
-				Log.d(TAG,"GOOD LOGIN");
-				Log.d(TAG,(data.get("first_name")).toString());
-				Log.d(TAG,(data.get("last_name")).toString());
-				Log.d(TAG,(data.get("mass")).toString());
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-		Log.d(TAG,msg.toString());
-    	Log.d(TAG,"...handleMessage:");
-        }
-	};
-    
-    public int attemptLogin(){ 
-    	return 0;
-    }
+	public void failedQuery(String failureReason) {
+		// TODO Auto-generated method stub
+		
+	}
 }
