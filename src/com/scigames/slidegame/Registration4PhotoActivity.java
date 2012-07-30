@@ -21,13 +21,21 @@ import com.scigames.slidegame.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.ByteArrayOutputStream;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -37,7 +45,7 @@ import android.widget.ImageView;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class Registration4PhotoActivity extends Activity {
+public class Registration4PhotoActivity extends Activity implements SciGamesListener{
     private static final int CAMERA_REQUEST = 1888; 
     private ImageView imageView;
     
@@ -46,14 +54,15 @@ public class Registration4PhotoActivity extends Activity {
 
     private String firstNameIn = "FNAME";
     private String lastNameIn = "LNAME";;
-    private String classIdIn = "CLASSID";
-    private String massIn = "MASS";
-    private String passwordIn = "PASSWORD";
-    private String rfidIn = "RFID";
+    private String studentIdIn = "studentId";
+    private String visitIdIn = "visitId";
     
     private String TAG = "Registration4Activity";
     
     private Bitmap photo;
+    
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://mysweetwebsite.com/push/student_mass.php");
+    
     
     public Registration4PhotoActivity() {
     	
@@ -65,15 +74,13 @@ public class Registration4PhotoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	Log.d(TAG,"super.OnCreate");
-    	
+    	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         Intent i = getIntent();
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
     	lastNameIn = i.getStringExtra("lName");
-    	classIdIn = i.getStringExtra("mClass");
-    	massIn = i.getStringExtra("mMass");
-    	passwordIn = i.getStringExtra("mPass");
-    	rfidIn = i.getStringExtra("mRfid");
+    	studentIdIn = i.getStringExtra("studentId");
+    	visitIdIn = i.getStringExtra("visitId");
     	Log.d(TAG,"...getStringExtra");
     	
         // Inflate our UI from its XML layout description.
@@ -90,6 +97,9 @@ public class Registration4PhotoActivity extends Activity {
         ((Button) findViewById(R.id.continue_button)).setOnClickListener(mContinueButtonListener);//(mDoneListener);
         ((Button) findViewById(R.id.take_pic)).setOnClickListener(mTakePhotoListener);
         Log.d(TAG,"...instantiateButtons");
+        
+        //set listener
+        task.setOnResultsListener(this);
     }
 
     /**
@@ -153,20 +163,41 @@ public class Registration4PhotoActivity extends Activity {
     
     OnClickListener mContinueButtonListener = new OnClickListener(){
     	public void onClick(View v) {
-    		Log.d(TAG,"...mContinueButtonListener onClick");
-       		Intent i = new Intent(Registration4PhotoActivity.this, Registration5EmailActivity.class);
-    		Log.d(TAG,"new Intent");
-    		i.putExtra("fName",firstNameIn);
-    		i.putExtra("lName",lastNameIn);
-			i.putExtra("classId", classIdIn);
-			i.putExtra("mMass", massIn);
-			i.putExtra("mClass", classIdIn);
-			i.putExtra("mPass", passwordIn);
-			i.putExtra("mRfid", rfidIn);
-    		Log.d(TAG,"startActivity...");
-    		Registration4PhotoActivity.this.startActivity(i);
-    		Log.d(TAG,"...startActivity");
-    		
+    		setProgressBarIndeterminateVisibility(true);
+        	Log.d(TAG, "...mDoneListener onClick");
+        	
+        	// convert image to byteArray - from: http://blog.sptechnolab.com/2011/03/09/android/android-upload-image-to-server/
+        	//Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(), R.drawable.imageView1); //original
+        	//Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(), R.id.imageView1);
+        	Bitmap bitmapOrg = photo;
+        	Log.d(TAG, "...bitmapFactory.decodeResource");
+			ByteArrayOutputStream bao = new ByteArrayOutputStream();
+			Log.d(TAG, "...new bytearrayoutputstream");
+			bitmapOrg.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+			Log.d(TAG, "...bitmap0rd.compress");
+			byte [] ba = bao.toByteArray();
+			Log.d(TAG, "...toByteArray");
+			
+			//String ba1 = Base64.encodeBytes(ba); //original 
+			String photoEncoded = Base64.encodeToString(ba, 0); //int here is "flags"
+			Log.d(TAG, "photoEncoded: ");
+			Log.d(TAG, photoEncoded);
+        	/*
+        	//push picture back.-- photo
+ 		    task.cancel(true);
+		    //create a new async task for every time you hit login (each can only run once ever)
+		   	task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://mysweetwebsite.com/push/new_photo.php");
+		    //set listener
+	        task.setOnResultsListener(Registration4PhotoActivity.this);
+	        		
+			//prepare key value pairs to send
+			String[] keyVals = {"student_id", studentIdIn, "visit_id", visitIdIn, "photo", photoEncoded}; 
+			
+			//create AsyncTask, then execute
+			AsyncTask<String, Void, JSONObject> serverResponse = null;
+			serverResponse = task.execute(keyVals);
+			Log.d(TAG,"...task.execute(keyVals)");
+    		*/
     	}
     };
     	
@@ -186,43 +217,44 @@ public class Registration4PhotoActivity extends Activity {
         }
     };      
   
-    OnClickListener mDoneListener = new OnClickListener() {
-        public void onClick(View v) {
-        	Log.d(TAG, "...mDoneListener onClick");
-        	//push picture back.-- photo
-        	Intent resultIntent = new Intent();
-        	Log.d(TAG, "...new Intent ()");
-        	
-        	//resultIntent.
-        	//Uri outputFileUri = Uri.fromFile(photo);
-        	//resultIntent.setType("image/*");
-        	//resultIntent.setAction(Intent.ACTION_GET_CONTENT);
-        	//startActivityForResult(Intent.createChooser(resultIntent, "Select Picture"),0);
-
-        	
-        	ByteArrayOutputStream bs = new ByteArrayOutputStream();
-        	photo.compress(Bitmap.CompressFormat.PNG, 50, bs);
-        	Log.d(TAG, "...photo.compress");
-        	
-        	resultIntent.putExtra("byteArray", bs.toByteArray());
-        	Log.d(TAG, "...resultIntent.putExtra");
-        	
-        	//setResult(Activity.RESULT_OK, resultIntent);
-        	startActivity(resultIntent);
-        	Log.d(TAG, "...startActivity");
-            
-        	finish();
-            Log.d(TAG, "...finish");
-        }
-    };
- 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
         if (requestCode == CAMERA_REQUEST) {  
             photo = (Bitmap) data.getExtras().get("data"); 
             //photoUri = data.getExtras().get("data");
             imageView.setImageBitmap(photo);
         }  
-    } 
+    }
+
+	public void onResultsSucceeded(String[] serverResponseStrings, JSONObject serverResponseJSON) throws JSONException {
+		Log.d(TAG,"...resultsSucceeded");
+		Log.d(TAG, "QUERY SUCCEEDED: ");
+		setProgressBarIndeterminateVisibility(false);
+		
+		for(int i=0; i<serverResponseStrings.length; i++){ //just print everything returned as a String[] for fun
+			Log.d(TAG, "["+i+"] "+serverResponseStrings[i]);
+		}
+		
+		JSONObject thisStudent;
+		thisStudent = serverResponseJSON.getJSONObject("student");
+		
+		Log.d(TAG, "this student: ");
+		Log.d(TAG, thisStudent.toString());
+   		Intent i = new Intent(Registration4PhotoActivity.this, Registration5EmailActivity.class);
+		Log.d(TAG,"new Intent");
+		i.putExtra("fName",firstNameIn);
+		i.putExtra("lName",lastNameIn);
+		i.putExtra("studentId",serverResponseStrings[0]);
+		i.putExtra("visitId",serverResponseStrings[1]);
+		Log.d(TAG,"startActivity...");
+		Registration4PhotoActivity.this.startActivity(i);
+		Log.d(TAG,"...startActivity");
+		
+	}
+
+	public void failedQuery(String failureReason) {
+		// TODO Auto-generated method stub
+		
+	} 
 }
     
 

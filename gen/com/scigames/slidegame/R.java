@@ -126,6 +126,9 @@ public final class R {
     }
     public static final class style {
         public static final int ActionButton=0x7f060000;
+        /**  Inherits the Holo theme with no action bar; no other styles needed. 
+         */
+        public static final int NoActionBar=0x7f060003;
         public static final int TextAppearance=0x7f060001;
         public static final int TextAppearance_ActionButton=0x7f060002;
     }

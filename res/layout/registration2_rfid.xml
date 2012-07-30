@@ -97,13 +97,14 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 -->
+
     <TextView
         android:id="@+id/greeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/title"
-        android:layout_alignBottom="@+id/title"
-        android:layout_alignLeft="@+id/instructions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"
+android:layout_marginTop="50dp"
+        android:layout_marginLeft="26dp"
         android:text="@string/greeting"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

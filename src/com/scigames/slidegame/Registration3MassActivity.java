@@ -21,6 +21,9 @@ package com.scigames.slidegame;
 //import java.io.IOException;
 //import java.net.URI;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.scigames.slidegame.R;
 
 import android.app.Activity;
@@ -29,6 +32,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 //import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,7 +56,7 @@ import android.widget.TextView;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class Registration3MassActivity extends Activity {
+public class Registration3MassActivity extends Activity implements SciGamesListener{
 
     private String TAG = "Registration3Activity";
     
@@ -61,9 +65,8 @@ public class Registration3MassActivity extends Activity {
 
     private String firstNameIn = "FNAME";
     private String lastNameIn = "LNAME";
-    private String classIdIn = "CLASSID";
-    private String passwordIn = "PASSWORD";
-    private String rfidIn = "RFID";
+    private String studentIdIn = "";
+    private String visitIdIn = "";
     
     private EditText thisMass;
     
@@ -73,6 +76,9 @@ public class Registration3MassActivity extends Activity {
     private int currProgress = 0;
     
     private String myMass = "";
+    
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration3MassActivity.this,"http://mysweetwebsite.com/push/new_mass.php");
+    
     
     public Registration3MassActivity() {
     	
@@ -89,9 +95,8 @@ public class Registration3MassActivity extends Activity {
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
     	lastNameIn = i.getStringExtra("lName");
-    	classIdIn = i.getStringExtra("mClass");
-    	passwordIn = i.getStringExtra("mPass");
-    	rfidIn = i.getStringExtra("mRfid");
+    	studentIdIn = i.getStringExtra("studentId");
+    	visitIdIn = i.getStringExtra("visitId");
     	Log.d(TAG,"...getStringExtra");
     	
         // Inflate our UI from its XML layout description.
@@ -129,6 +134,9 @@ public class Registration3MassActivity extends Activity {
         ((Button) findViewById(R.id.continue_button)).setOnClickListener(mContinueButtonListener);
         ((Button) findViewById(R.id.scan)).setOnClickListener(mScanButtonListener);
         Log.d(TAG,"...instantiateButtons");
+        
+      //set listener
+        task.setOnResultsListener(this);
     }
 
     /**
@@ -193,20 +201,24 @@ public class Registration3MassActivity extends Activity {
     
     OnClickListener mContinueButtonListener = new OnClickListener(){
     	public void onClick(View v) {
-    		Log.d(TAG,"...mContinueButtonListener onClick");
-       		Intent i = new Intent(Registration3MassActivity.this, Registration4PhotoActivity.class);
-    		Log.d(TAG,"new Intent");
-    		i.putExtra("fName", firstNameIn);
-    		i.putExtra("lName", lastNameIn);
-    		i.putExtra("mMass", thisMass.getText().toString());
-			i.putExtra("mClass", classIdIn);
-			i.putExtra("mPass", passwordIn);
-			i.putExtra("mRfid", rfidIn);
-    		//i.putExtra("pword",password.getText().toString());
-    		Log.d(TAG,"startActivity...");
-    		Registration3MassActivity.this.startActivity(i);
-    		Log.d(TAG,"...startActivity");
     		
+ 		    task.cancel(true);
+		    //create a new async task for every time you hit login (each can only run once ever)
+		   	task = new SciGamesHttpPoster(Registration3MassActivity.this,"http://mysweetwebsite.com/push/new_mass.php");
+		    //set listener
+	        task.setOnResultsListener(Registration3MassActivity.this);
+	        		
+
+			//prepare key value pairs to send
+			String[] keyVals = {"student_id", studentIdIn, "visit_id", visitIdIn, "mass", thisMass.getText().toString()}; 
+			Log.d(TAG,"keyVals passed: ");
+			Log.d(TAG, "student_id"+ studentIdIn+ "visit_id"+ visitIdIn+ "mass"+ thisMass.getText().toString());
+			
+			//create AsyncTask, then execute
+			AsyncTask<String, Void, JSONObject> serverResponse = null;
+			serverResponse = task.execute(keyVals);
+			Log.d(TAG,"...task.execute(keyVals)");
+
     	}
     };
     	
@@ -346,6 +358,38 @@ public class Registration3MassActivity extends Activity {
         	}
       	} 
     }
+
+	public void onResultsSucceeded(String[] serverResponseStrings,
+		JSONObject serverResponseJSON) throws JSONException {
+		
+		Log.d(TAG, "LOGIN SUCCEEDED: ");
+		for(int i=0; i<serverResponseStrings.length; i++){ //just print everything returned as a String[] for fun
+			Log.d(TAG, "["+i+"] "+serverResponseStrings[i]);
+		}
+		
+		JSONObject thisStudent;
+		thisStudent = serverResponseJSON.getJSONObject("student");
+		
+		Log.d(TAG, "this student: ");
+		Log.d(TAG, thisStudent.toString());
+		
+		Log.d(TAG,"...onResultsSucceeded");
+   		Intent i = new Intent(Registration3MassActivity.this, Registration4PhotoActivity.class);
+		Log.d(TAG,"new Intent");
+		i.putExtra("fName", firstNameIn);
+		i.putExtra("lName", lastNameIn);
+		i.putExtra("studentId",serverResponseStrings[0]);
+		i.putExtra("visitId",serverResponseStrings[1]);
+		Log.d(TAG,"startActivity...");
+		Registration3MassActivity.this.startActivity(i);
+		Log.d(TAG,"...startActivity");
+		
+	}
+
+	public void failedQuery(String failureReason) {
+		// TODO Auto-generated method stub
+		Log.d(TAG, "QUERY FAILED, REASON: " + failureReason);
+	}
 }
     
 

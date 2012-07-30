@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URI;
 */
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.scigames.slidegame.R;
@@ -57,7 +58,7 @@ import android.widget.TextView;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class Registration2RFIDActivity extends Activity {
+public class Registration2RFIDActivity extends Activity implements SciGamesListener{
 
     
     static final private int BACK_ID = Menu.FIRST;
@@ -65,14 +66,10 @@ public class Registration2RFIDActivity extends Activity {
 
     private String visitIdIn = "FNAME";
     private String studentIdIn = "LNAME";
-    private String classIdIn = "CLASSID";
-    private String passwordIn = "PASSWORD";
     
     private String firstNameIn = "test";
     private String lastNameIn = "test";
     
-    private EditText firstName;
-    private EditText lastName;
     private EditText braceletId;
     //private EditText password;
     private String TAG = "Registration2Activity";
@@ -84,6 +81,8 @@ public class Registration2RFIDActivity extends Activity {
     
     private String rfID = "";
     
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration2RFIDActivity.this, "http://mysweetwebsite.com/push/new_rfid.php");
+
     public Registration2RFIDActivity() {
     	
 
@@ -99,6 +98,9 @@ public class Registration2RFIDActivity extends Activity {
         Log.d(TAG,"getIntent");
     	visitIdIn = i.getStringExtra("visitId");
     	studentIdIn = i.getStringExtra("studentId");
+
+    	firstNameIn = i.getStringExtra("fName");
+    	lastNameIn = i.getStringExtra("lName");
     	//classIdIn = i.getStringExtra("mClass");
     	//passwordIn = i.getStringExtra("mPass");
     	Log.d(TAG,"...getStringExtra:");
@@ -156,6 +158,8 @@ public class Registration2RFIDActivity extends Activity {
         ((Button) findViewById(R.id.continue_button)).setOnClickListener(mContinueButtonListener);
         ((Button) findViewById(R.id.scan)).setOnClickListener(mScanButtonListener);
         Log.d(TAG,"...instantiateButtons");
+        
+        task.setOnResultsListener(this);
     }
 
     /**
@@ -219,9 +223,7 @@ public class Registration2RFIDActivity extends Activity {
             finish();
             return true;
         case CLEAR_ID:
-        	lastName.setText("");
-            firstName.setText("");
-            //password.setText("");
+        	braceletId.setText("");
             return true;
         }
 
@@ -231,46 +233,28 @@ public class Registration2RFIDActivity extends Activity {
     OnClickListener mContinueButtonListener = new OnClickListener(){
     	
  	   public void onClick(View v) {
-   		Log.d(TAG,"mLogInListener.onClick");
-   		//final SciGamesHttpPoster poster = new SciGamesHttpPoster("http://mysweetwebsite.com/pull/auth_student.php");
-   	    		//("http://requestb.in/rb1n8prb");
-   		AsyncTask<String, Void, JSONObject> serverResponse = null;
+ 		   
+ 		  Log.d(TAG,"mContinueButtonListener.onClick");
+		    task.cancel(true);
+		    //create a new async task for every time you hit login (each can only run once ever)
+		   	task = new SciGamesHttpPoster(Registration2RFIDActivity.this,"http://mysweetwebsite.com/push/new_rfid.php");
+		    //set listener
+	        task.setOnResultsListener(Registration2RFIDActivity.this);
+	        
+	      //prepare key value pairs to send
+			String[] keyVals = {"student_id", studentIdIn, "visit_id", visitIdIn, "rfid", braceletId.getText().toString()}; 
+			Log.d(TAG,"keyVals passed: ");
+			Log.d(TAG, "student_id"+ studentIdIn+ "visit_id"+ visitIdIn+ "rfid"+ braceletId.getText().toString());
 			
-			String[] keyVals = {"visit_id", visitIdIn, "student_id", studentIdIn, "rfid","bitchassbitch"};
-			serverResponse = new SciGamesHttpPoster(Registration2RFIDActivity.this, "http://mysweetwebsite.com/push/new_rfid.php").execute(keyVals);
-
-			while(serverResponse == null){
-				//wait
-				int i=0;
-			}
-			Log.d(TAG,"...created serverResponse with poster.postData");
-			Log.d(TAG,"serverResponse: ");
-			Log.d(TAG, serverResponse.toString());
-   	}
-    	
-//    	public void onClick(View v) {
-//    		Log.d(TAG,"...mContinueButtonListener onClick");
-//    		
-//    		//if "registration status"
-//    		//== 3, directly to profile page
-//    		//== 2, to Mass page, then Photo page, then profile page
-//    		//== 1, to Photo page, then profile page
-//       		Intent i = new Intent(Registration2RFIDActivity.this, Registration3MassActivity.class);
-//    		Log.d(TAG,"new Intent");
-//    		i.putExtra("fName",firstNameIn);
-//    		i.putExtra("lName",lastNameIn);
-//			i.putExtra("mClass", classIdIn);
-//			i.putExtra("mPass", passwordIn);
-//			i.putExtra("mRfid", braceletId.getText().toString());
-//    		Log.d(TAG,"startActivity...");
-//    		Registration2RFIDActivity.this.startActivity(i);
-//    		Log.d(TAG,"...startActivity");
-//    		
-//    	}
+			//create AsyncTask, then execute
+			AsyncTask<String, Void, JSONObject> serverResponse = null;
+			serverResponse = task.execute(keyVals);
+			Log.d(TAG,"mLogInListener server response:");
+			Log.d(TAG,serverResponse.toString());
+ 	   }
     };
     	
-       
-
+    
     /**
      * A call-back for when the user presses the back button.
      */
@@ -405,6 +389,37 @@ public class Registration2RFIDActivity extends Activity {
         	}
       	} 
     }
+
+	public void onResultsSucceeded(String[] serverResponseStrings,
+			JSONObject serverResponseJSON) throws JSONException {
+		// TODO Auto-generated method stub
+		Log.d(TAG, "QUERY SUCCEEDED: ");
+		for(int i=0; i<serverResponseStrings.length; i++){ //just print everything returned as a String[] for fun
+			Log.d(TAG, "["+i+"] "+serverResponseStrings[i]);
+		}
+		JSONObject thisStudent = serverResponseJSON.getJSONObject("student");
+		
+		Log.d(TAG, "this student: ");
+		Log.d(TAG, thisStudent.toString());
+		
+		Log.d(TAG,"...onResultsSucceeded");
+   		Intent i = new Intent(Registration2RFIDActivity.this,Registration3MassActivity.class);
+		Log.d(TAG,"new Intent");
+		i.putExtra("fName", firstNameIn);
+		i.putExtra("lName", lastNameIn);
+		i.putExtra("studentId",serverResponseStrings[0]);
+		i.putExtra("visitId",serverResponseStrings[1]);
+		//i.putExtra("pword",password.getText().toString());
+		Log.d(TAG,"startActivity...");
+		Registration2RFIDActivity.this.startActivity(i);
+		Log.d(TAG,"...startActivity");
+	}
+
+	public void failedQuery(String failureReason) {
+		// TODO Auto-generated method stub
+		Log.d(TAG, "LOGIN FAILED, REASON: " + failureReason);
+		
+	}
 }
     
 

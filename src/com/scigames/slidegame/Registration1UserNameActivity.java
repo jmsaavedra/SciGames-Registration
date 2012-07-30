@@ -37,7 +37,9 @@ import org.json.JSONObject;
 import com.scigames.slidegame.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -58,6 +60,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.scigames.slidegame.SciGamesHttpPoster;
 
@@ -66,7 +69,7 @@ import com.scigames.slidegame.SciGamesHttpPoster;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class Registration1UserNameActivity extends Activity {
+public class Registration1UserNameActivity extends Activity implements SciGamesListener{
 
     
     static final private int BACK_ID = Menu.FIRST;
@@ -81,6 +84,9 @@ public class Registration1UserNameActivity extends Activity {
     private EditText lastName;
     private EditText password;
     private String TAG = "Registration1Activity";
+    
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration1UserNameActivity.this,"http://mysweetwebsite.com/push/register_player.php");
+    AlertDialog alertDialog;
     
     public Registration1UserNameActivity() {
     	
@@ -132,6 +138,25 @@ public class Registration1UserNameActivity extends Activity {
         lastName.setText(lastNameIn);
         //password.setText(passwordIn);
         Log.d(TAG,"...setTexts with incoming name/pw");
+        
+        //set listener
+        task.setOnResultsListener(this);
+        
+		alertDialog = new AlertDialog.Builder(
+		        Registration1UserNameActivity.this).create();
+	    // Setting Dialog Title
+	    alertDialog.setTitle("Login Failed");
+	    // Setting Dialog Message
+	    alertDialog.setMessage("Welcome to AndroidHive.info");
+	    // Setting Icon to Dialog
+	    //alertDialog.setIcon(R.drawable.tick);
+	
+	    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) {
+	        // Write your code here to execute after dialog closed
+	        Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+	        }
+	    });
     }
 
     /**
@@ -194,72 +219,25 @@ public class Registration1UserNameActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
     
-    
-    public void postData() {
-    	Log.d(TAG, "...postData()");
-        // Create a new HttpClient and Post Header
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://mysweetwebsite.com/push/register_player.php");//("http://requestb.in/xurt8kxu");
-        Log.d(TAG, "...create POST");
-        try {
-            // Add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("first_name", firstName.getText().toString()));
-            nameValuePairs.add(new BasicNameValuePair("last_name", lastName.getText().toString()));
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            Log.d(TAG, "...setEntity");
-            // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(httppost);
-            Log.d(TAG, "...executed");
-            Log.d(TAG, response.toString());
-            
-        } catch (ClientProtocolException e) {
-        	Log.d(TAG, e.toString());
-        } catch (IOException e) {
-        	Log.d(TAG, e.toString());
-        }
-    } 
-    // see http://androidsnippets.com/executing-a-http-post-request-with-httpclient
-    
+        
     OnClickListener mContinueButtonListener = new OnClickListener() {
  	   public void onClick(View v) {
    		Log.d(TAG,"mLogInListener.onClick");
-   		//final SciGamesHttpPoster poster = new SciGamesHttpPoster("http://mysweetwebsite.com/pull/auth_student.php");
-   	    		//("http://requestb.in/rb1n8prb");
-   		AsyncTask<String, Void, JSONObject> serverResponse = null;
-			
+   		//TODO: check that neither field is empty
+		   task.cancel(true);
+		    //create a new async task for every time you hit login (each can only run once ever)
+		   	task = new SciGamesHttpPoster(Registration1UserNameActivity.this,"http://mysweetwebsite.com/push/register_player.php");
+		    //set listener
+	        task.setOnResultsListener(Registration1UserNameActivity.this);	
+   					
 			String[] keyVals = {"first_name", firstName.getText().toString(), "last_name", lastName.getText().toString()};
-			serverResponse = new SciGamesHttpPoster(Registration1UserNameActivity.this, "http://mysweetwebsite.com/push/register_player.php").execute(keyVals);
+			AsyncTask<String, Void, JSONObject> serverResponse = null;
+			serverResponse = task.execute(keyVals);
 
-			while(serverResponse == null){
-				//wait
-				int i=0;
-			}
 			Log.d(TAG,"...created serverResponse with poster.postData");
 			Log.d(TAG,"serverResponse: ");
 			Log.d(TAG, serverResponse.toString());
-   	}
-//    	public void onClick(View v) {
-//    		JSONObject serverResponse = null;
-//    		//postData();
-//    		Log.d(TAG,"...mContinueButtonListener onClick");
-//    		SciGamesHttpPoster poster = new SciGamesHttpPoster("http://mysweetwebsite.com/push/register_player.php");
-//    		serverResponse = poster.newPostData("first_name", firstName.getText().toString(), "last_name",lastName.getText().toString());
-//			Log.d(TAG,"...created serverResponse with poster.postData");
-//			//Log.d(TAG,"serverResponse: ");
-//			//Log.d(TAG, serverResponse.toString());
-//			Log.d(TAG,"serverResponse: ");
-//			Log.d(TAG, serverResponse.toString());
-//       		Intent i = new Intent(Registration1UserNameActivity.this, Registration2RFIDActivity.class);
-//    		Log.d(TAG,"new Intent");
-//    		i.putExtra("fName",firstName.getText().toString());
-//    		i.putExtra("lName",lastName.getText().toString());
-//    		i.putExtra("mPass", passwordIn);
-//    		i.putExtra("mClass", classIdIn);
-//    		Log.d(TAG,"startActivity...");
-//    		Registration1UserNameActivity.this.startActivity(i);
-//    		Log.d(TAG,"...startActivity");
-//    	}
+ 	   }
     };
     	
        
@@ -284,37 +262,37 @@ public class Registration1UserNameActivity extends Activity {
         }
     };      
     
-    public void onActivityResult(int requestCode, Intent data){
-    //public void onActivityResult(int requestCode, int resultCode, Intent data) {     
-      super.onActivityResult(requestCode, 1, data); 
-      Log.d(TAG,"...super.onActivityResult");
-      switch(requestCode) { 
-
-      case (0) : { 
-        	Log.d(TAG,"...case(0)");
-          //if (resultCode == Activity.RESULT_OK) { 
-        	//  Log.d(TAG,"...RESULT_OK");
-        	  
-        	  ImageView previewThumbnail = new ImageView(this);
-        	  Log.d(TAG,"...newImageView");
-
-        	    Bitmap b = BitmapFactory.decodeByteArray(
-        	            getIntent().getByteArrayExtra("byteArray"),0,getIntent().getByteArrayExtra("byteArray").length);        
-        	  Log.d(TAG,"...BitmapFactory.decodeByteArray");
-        	  
-        	  previewThumbnail.setImageBitmap(b);
-        	  Log.d(TAG,"...setImageBitmap");
-        	  
-        	  LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
-        	  Log.d(TAG,"...new layoutparams");
-        	  
-        	  previewThumbnail.setLayoutParams(layoutParams);
-        	  Log.d(TAG,"...setLayoutParams");
-          	//}
-          	break;
-        	}
-      	} 
-    }
+//    public void onActivityResult(int requestCode, Intent data){
+//    //public void onActivityResult(int requestCode, int resultCode, Intent data) {     
+//      super.onActivityResult(requestCode, 1, data); 
+//      Log.d(TAG,"...super.onActivityResult");
+//      switch(requestCode) { 
+//
+//      case (0) : { 
+//        	Log.d(TAG,"...case(0)");
+//          //if (resultCode == Activity.RESULT_OK) { 
+//        	//  Log.d(TAG,"...RESULT_OK");
+//        	  
+//        	  ImageView previewThumbnail = new ImageView(this);
+//        	  Log.d(TAG,"...newImageView");
+//
+//        	    Bitmap b = BitmapFactory.decodeByteArray(
+//        	            getIntent().getByteArrayExtra("byteArray"),0,getIntent().getByteArrayExtra("byteArray").length);        
+//        	  Log.d(TAG,"...BitmapFactory.decodeByteArray");
+//        	  
+//        	  previewThumbnail.setImageBitmap(b);
+//        	  Log.d(TAG,"...setImageBitmap");
+//        	  
+//        	  LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
+//        	  Log.d(TAG,"...new layoutparams");
+//        	  
+//        	  previewThumbnail.setLayoutParams(layoutParams);
+//        	  Log.d(TAG,"...setLayoutParams");
+//          	//}
+//          	break;
+//        	}
+//      	} 
+//    }
     //---- this function hides the keyboard when the user clicks outside of keyboard when it's open!
     @Override 
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -337,7 +315,29 @@ public class Registration1UserNameActivity extends Activity {
             }
         }
     return ret;
-    }    
+    }
+
+	public void onResultsSucceeded(String[] serverResponse,
+			JSONObject serverResponseJSON) throws JSONException {
+		// TODO Auto-generated method stub
+		Log.d(TAG, "LOGIN SUCCEEDED: ");
+		for(int i=0; i<serverResponse.length; i++){ //just print everything returned as a String[] for fun
+			Log.d(TAG, "["+i+"] "+serverResponse[i]);
+		}
+		JSONObject thisStudent;
+
+		thisStudent = serverResponseJSON.getJSONObject("student");
+		
+		Log.d(TAG, "this student: ");
+		Log.d(TAG, thisStudent.toString());
+	}
+
+	public void failedQuery(String failureReason) {
+		// TODO Auto-generated method stub
+		Log.d(TAG, "LOGIN FAILED, REASON: " + failureReason);
+		alertDialog.setMessage(failureReason);
+		alertDialog.show();
+	}    
 }
     
 
