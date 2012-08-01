@@ -25,22 +25,26 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginActivity extends Activity implements SciGamesListener,View.OnSystemUiVisibilityChangeListener{
+public class LoginActivity extends Activity implements SciGamesListener{
 	    
     static final private int QUIT_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
@@ -63,12 +67,19 @@ public class LoginActivity extends Activity implements SciGamesListener,View.OnS
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        Log.d(TAG,"super.OnCreate");
-        // Inflate our UI from its XML layout description.
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION );
+        // View v = findViewById(R.layout.login_page);
+        // v.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN); 
+        //Window w = this.getWindow(); // in Activity's onCreate() for instance
+        //w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        //        WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.login_page);
-
+        Log.d(TAG,"super.OnCreate");
+        // Inflate our UI from its XML layout description.       
+        
         firstName = (EditText) findViewById(R.id.first_name);
         /* to hide the keyboard on launch, then open when tap in firstname field */
         firstName.setInputType(InputType.TYPE_NULL);
@@ -86,7 +97,6 @@ public class LoginActivity extends Activity implements SciGamesListener,View.OnS
         classId = (EditText) findViewById(R.id.class_id);
 
         // Hook up button presses to the appropriate event handler.
-        ((Button) findViewById(R.id.clear)).setOnClickListener(mClearListener);
         ((Button) findViewById(R.id.login_button)).setOnClickListener(mLogInListener);
         ((Button) findViewById(R.id.register)).setOnClickListener(mRegisterListener);
         
@@ -108,15 +118,32 @@ public class LoginActivity extends Activity implements SciGamesListener,View.OnS
 	        Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
 	        }
 	    });
+	    
+	    Typeface ExistenceLightOtf = Typeface.createFromAsset(getAssets(),"fonts/Existence-Light.ttf");
+	    Typeface Museo300Regular = Typeface.createFromAsset(getAssets(),"fonts/Museo300-Regular.otf");
+	    Typeface Museo500Regular = Typeface.createFromAsset(getAssets(),"fonts/Museo500-Regular.otf");
+	    Typeface Museo700Regular = Typeface.createFromAsset(getAssets(),"fonts/Museo700-Regular.otf");
+	    
+	    TextView welcome = (TextView)findViewById(R.id.welcome);
+	    TextView notascigamersentence = (TextView)findViewById(R.id.notascigamersentence);
+	    setTextViewFont(ExistenceLightOtf, welcome);
+	    setTextViewFont(Museo500Regular, notascigamersentence);
+	    
+        Button login = (Button) findViewById(R.id.login_button);
+        Button register = (Button) findViewById(R.id.register);
+        setButtonFont(ExistenceLightOtf, login, register);
+	    
+	    setEditTextFont(Museo300Regular, firstName, lastName, password, classId);
+	    
     }
     
     //---- runs when user clicks "Let's Go!"
     OnClickListener mLogInListener = new OnClickListener(){
 	   public void onClick(View v) {
-		   Log.d(TAG,"mLogInListener.onClick");
-		   setProgressBarIndeterminateVisibility(true);
+		    Log.d(TAG,"mLogInListener.onClick");
+		    setProgressBarIndeterminateVisibility(true);
 		   
-		   task.cancel(true);
+		    task.cancel(true);
 		    //create a new async task for every time you hit login (each can only run once ever)
 		   	task = new SciGamesHttpPoster(LoginActivity.this,"http://mysweetwebsite.com/pull/auth_student.php");
 		    //set listener
@@ -144,52 +171,104 @@ public class LoginActivity extends Activity implements SciGamesListener,View.OnS
 		for(int i=0; i<serverResponseStrings.length; i++){ //just print everything returned as a String[] for fun
 			Log.d(TAG, "["+i+"] "+serverResponseStrings[i]);
 		}
-		JSONObject thisStudent;
-
-		thisStudent = serverResponseJSON.getJSONObject("student");
+		JSONObject thisStudent = serverResponseJSON.getJSONObject("student");
+		
+		String cartLevel = thisStudent.getString("cart_game_level");
+		String slideLevel = thisStudent.getString("slide_game_level");
+		String mass = thisStudent.getString("mass");
+		String photoUrl = thisStudent.getString("photo");
+		String firstName = thisStudent.getString("first_name");
+		String lastName = thisStudent.getString("last_name");
+		String email = thisStudent.getString("email");
+		String pw = thisStudent.getString("pw");
+		String classId = thisStudent.getString("class_id");
+		String rfid = thisStudent.getString("current_rfid");
 		
 		Log.d(TAG, "this student: ");
 		Log.d(TAG, thisStudent.toString());
 		
-		if(serverResponseStrings[2].equals("false")){ //check active state
-			//send to RFID activity
+		if(serverResponseStrings[2].equals("false")){ //check active state. if inactive for today, get RFID
 			Log.d(TAG, "off to RFID page!");
+			
+			/****** RFID ACTIVITY INTENT ******/
     		Intent i = new Intent(LoginActivity.this, Registration2RFIDActivity.class); //THIS IS THE CORRECT PAGE
     		Log.d(TAG,"new Intent");
-    		i.putExtra("fName",firstName.getText().toString());
-    		i.putExtra("lName",lastName.getText().toString());   		
+    		i.putExtra("fName",firstName);
+    		i.putExtra("lName",lastName);
     		i.putExtra("studentId",serverResponseStrings[0]);
     		i.putExtra("visitId",serverResponseStrings[1]);
-    		Log.d(TAG,"startActivity...");
     		LoginActivity.this.startActivity(i);
     		Log.d(TAG,"...startActivity");
+    		/**********************************/
 		}
-		else if(thisStudent.get("mass").equals(null)){
-			//send to mass activity
+		
+		else if(thisStudent.get("mass").equals(null)){ //no mass recorded
 			Log.d(TAG, "off to mass page!");
-	   		//Intent i = new Intent(LoginActivity.this, Registration3MassActivity.class); //THIS IS THE CORRECT PAGE
-			Intent i = new Intent(LoginActivity.this, Registration4PhotoActivity.class);
+	   		
+			/****** MASS ACTIVITY INTENT ******/
+			Intent i = new Intent(LoginActivity.this, Registration3MassActivity.class);
     		Log.d(TAG,"new Intent");
-    		i.putExtra("fName",firstName.getText().toString());
-    		i.putExtra("lName",lastName.getText().toString());   		
+    		i.putExtra("fName",firstName);
+    		i.putExtra("lName",lastName);
     		i.putExtra("studentId",serverResponseStrings[0]);
     		i.putExtra("visitId",serverResponseStrings[1]);
-    		Log.d(TAG,"startActivity...");
     		LoginActivity.this.startActivity(i);
     		Log.d(TAG,"...startActivity");
+    		/**********************************/
 
 		}
-		else if(thisStudent.get("photo").equals(null)){
+		
+		else if(thisStudent.get("photo").equals(null)){ //no photo recorded
 			//send to photo activity
 			Log.d(TAG, "off to photo page!");
+			
+			/****** PHOTO ACTIVITY INTENT ******/
+			Intent i = new Intent(LoginActivity.this, Registration4PhotoActivity.class);
+    		Log.d(TAG,"new Intent");
+    		i.putExtra("fName",firstName);
+    		i.putExtra("lName",lastName);
+    		i.putExtra("studentId",serverResponseStrings[0]);
+    		i.putExtra("visitId",serverResponseStrings[1]);
+    		LoginActivity.this.startActivity(i);
+    		Log.d(TAG,"...startActivity");
+    		/**********************************/
 		}
-		else if(thisStudent.get("email").equals(null)){
+		
+		else if(thisStudent.get("email").equals(null)){ //no email recorded
 			//send to email activity
 			Log.d(TAG, "off to email page!");
+			
+			/****** EMAIL ACTIVITY INTENT ******/
+			Intent i = new Intent(LoginActivity.this, Registration5EmailActivity.class);
+    		Log.d(TAG,"new Intent");
+    		i.putExtra("fName",firstName);
+    		i.putExtra("lName",lastName);
+    		i.putExtra("studentId",serverResponseStrings[0]);
+    		i.putExtra("visitId",serverResponseStrings[1]);
+    		LoginActivity.this.startActivity(i);
+    		Log.d(TAG,"...startActivity");
+    		/**********************************/
 		}
 		else {
 			//send directly to their profile, they're all registered.
-			Log.d(TAG, "off to profile page!");
+			/****** PROFILE ACTIVITY INTENT ******/
+			Intent i = new Intent(LoginActivity.this, ProfileActivity.class);
+    		Log.d(TAG,"new Intent");
+    		i.putExtra("fName",firstName);
+    		i.putExtra("lName",lastName);
+    		i.putExtra("photoUrl", photoUrl);
+    		i.putExtra("mass", mass);
+    		i.putExtra("cartLevel", cartLevel);
+    		i.putExtra("slideLevel", cartLevel);
+    		i.putExtra("email", email);
+    		i.putExtra("rfid", rfid);
+    		i.putExtra("password",pw);
+    		i.putExtra("classId",classId);
+    		i.putExtra("studentId",serverResponseStrings[0]);
+    		i.putExtra("visitId",serverResponseStrings[1]);
+    		LoginActivity.this.startActivity(i);
+    		Log.d(TAG,"...startActivity");
+    		/****** PROFILE ACTIVITY INTENT ******/
 		}
 	}
 
@@ -232,6 +311,7 @@ public class LoginActivity extends Activity implements SciGamesListener,View.OnS
     @Override
     protected void onResume() {
         super.onResume();
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION );
     }
 
     /**
@@ -288,14 +368,38 @@ public class LoginActivity extends Activity implements SciGamesListener,View.OnS
         }
         return super.onOptionsItemSelected(item);
     }
+    
+    //---- methods for setting fonts!!
+    public static void setTextViewFont(Typeface tf, TextView...params) {
+        for (TextView tv : params) {
+            tv.setTypeface(tf);
+        }
+    } 
+    public static void setEditTextFont(Typeface tf, EditText...params) {
+        for (EditText tv : params) {
+            tv.setTypeface(tf);
+        }
+    }  
+    public static void setButtonFont(Typeface tf, Button...params) {
+        for (Button tv : params) {
+            tv.setTypeface(tf);
+        }
+    }
    
     //---- this function hides the keyboard when the user clicks outside of keyboard when it's open!
     @Override 
     public boolean dispatchTouchEvent(MotionEvent event) {
 
         View v = getCurrentFocus();
+        Log.d(TAG, "CLICK DETECTED");
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION );
+//        v.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+//        Window win = this.getWindow(); // in Activity's onCreate() for instance
+//        win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         boolean ret = super.dispatchTouchEvent(event);
-
+        
         if (v instanceof EditText) {
             View w = getCurrentFocus();
             int scrcoords[] = new int[2];
@@ -311,10 +415,35 @@ public class LoginActivity extends Activity implements SciGamesListener,View.OnS
             }
         }
     return ret;
+    
     }
-
-	public void onSystemUiVisibilityChange(int visibility) {
-		// TODO Auto-generated method stub
-		//setSystemUiVisibility(0);
+	
+	@Override
+	public void onBackPressed() {
+		//do nothing
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        
 	}
+//    @Override
+//    public void onAttachedToWindow() {
+//        super.onAttachedToWindow();
+//        this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD);           
+//    }
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//	   if(keyCode == KeyEvent.KEYCODE_HOME)
+//	    {
+//	     Log.i("Home Button","Clicked");
+//	    }
+//	   if(keyCode==KeyEvent.KEYCODE_BACK)
+//	   {
+//		   Log.i("back Button","Clicked");
+//	   }
+//	   if(keyCode==KeyEvent.KEYCODE_APP_SWITCH){
+//		   Log.i("app switch Button","Clicked");
+//	}
+//	 return false;
+//	}
+//	
+	
 }

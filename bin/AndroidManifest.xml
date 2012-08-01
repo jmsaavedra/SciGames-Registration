@@ -28,11 +28,13 @@
     
     <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="15"/>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <!-- This package contains an application...  The 'label' is the name
          to display to the user for the overall application, and provides
          a default label for all following components.  The syntax here is a
          reference to one of our string resources.-->
-    <application android:label="@string/app_name"        
+    <application android:label="@string/app_name"  
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
         android:icon="@drawable/scigames_icon">
 		<!-- android:theme="@style/NoActionBar" -->
         <!-- An Activity in the application - this is something the user
@@ -54,34 +56,29 @@
             </intent-filter>
 	
         </activity>
-        <activity android:name=".Registration1UserNameActivity" android:label="@string/app_name" android:screenOrientation="portrait"><!--  //android:windowSoftInputMode="stateVisible|adjustResize"> -->
+        <activity android:name=".Registration1UserNameActivity" android:label="User Name" android:screenOrientation="portrait"><!--  //android:windowSoftInputMode="stateVisible|adjustResize"> -->
         	<intent-filter>
             </intent-filter>
         </activity>
-        <activity android:name=".Registration2RFIDActivity" android:label="@string/app_name" android:screenOrientation="portrait">
+        <activity android:name=".Registration2RFIDActivity" android:label="RFID" android:screenOrientation="portrait">
         	<intent-filter>
             </intent-filter>
         </activity>
-        <activity android:name=".Registration3MassActivity" android:label="@string/app_name" android:screenOrientation="portrait">
+        <activity android:name=".Registration3MassActivity" android:label="Mass" android:screenOrientation="portrait">
         	<intent-filter>
             </intent-filter>
         </activity>
-        <activity android:name=".Registration4PhotoActivity" android:label="@string/app_name" android:screenOrientation="portrait">
+        <activity android:name=".Registration4PhotoActivity" android:label="Profile Photo" android:screenOrientation="portrait">
         	<intent-filter>
             </intent-filter>
         </activity>
-        <activity android:name=".Registration5EmailActivity" android:label="@string/app_name" android:screenOrientation="portrait">
+        <activity android:name=".Registration5EmailActivity" android:label="Email Address" android:screenOrientation="portrait">
         	<intent-filter>
             </intent-filter>
         </activity>
-		<activity android:name=".ProfileActivity" android:label="@string/app_name" android:screenOrientation="portrait">
+		<activity android:name=".ProfileActivity" android:label="Profile" android:screenOrientation="portrait">
         	<intent-filter>
             </intent-filter>
-        </activity>
-       	<activity android:name=".CameraActivity" android:label="@string/app_name" android:screenOrientation="landscape">
-        	<intent-filter>
-            </intent-filter>
-        </activity>
-         
+        </activity>         
     </application> 
 </manifest>

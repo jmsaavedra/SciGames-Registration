@@ -46,6 +46,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -93,7 +94,8 @@ public class Registration2RFIDActivity extends Activity implements SciGamesListe
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	Log.d(TAG,"super.OnCreate");
-    	
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         Intent i = getIntent();
         Log.d(TAG,"getIntent");
     	visitIdIn = i.getStringExtra("visitId");

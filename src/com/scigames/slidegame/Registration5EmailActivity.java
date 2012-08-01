@@ -21,6 +21,9 @@ package com.scigames.slidegame;
 //import java.io.IOException;
 //import java.net.URI;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.scigames.slidegame.R;
 
 import android.app.Activity;
@@ -28,6 +31,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 //import android.graphics.Bitmap;
 //import android.graphics.BitmapFactory;
 //import android.net.Uri;
@@ -54,7 +58,7 @@ import android.widget.TextView;
  * activity. Inside of its window, it places a single view: an EditText that
  * displays and edits some internal text.
  */
-public class Registration5EmailActivity extends Activity {
+public class Registration5EmailActivity extends Activity implements SciGamesListener{
 
     private String TAG = "Registration5Activity";
     
@@ -63,12 +67,11 @@ public class Registration5EmailActivity extends Activity {
 
     private String firstNameIn = "FNAME";
     private String lastNameIn = "LNAME";
-    private String classIdIn = "CLASSID";
-    private String massIn = "MASS";
-    private String passwordIn = "PASSWORD";
-    private String rfidIn = "RFID";
+    private String studentIdIn = "STUDENTID";
+    private String visitIdIn = "VISITID";
     private EditText email;
     //private String passwordIn = "PWORD";;
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration5EmailActivity.this,"http://mysweetwebsite.com/push/update_email.php");
     
     public Registration5EmailActivity() {
     	
@@ -85,10 +88,8 @@ public class Registration5EmailActivity extends Activity {
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
     	lastNameIn = i.getStringExtra("lName");
-    	classIdIn = i.getStringExtra("mClass");
-    	massIn = i.getStringExtra("mMass");
-    	passwordIn = i.getStringExtra("mPass");
-    	rfidIn = i.getStringExtra("mRfid");
+    	studentIdIn = i.getStringExtra("studentId");
+    	visitIdIn = i.getStringExtra("visitId");
     	Log.d(TAG,"...getStringExtra");
     	
         // Inflate our UI from its XML layout description.
@@ -119,6 +120,9 @@ public class Registration5EmailActivity extends Activity {
         ((Button) findViewById(R.id.back)).setOnClickListener(mBackListener);
         ((Button) findViewById(R.id.continue_button)).setOnClickListener(mContinueButtonListener);
         Log.d(TAG,"...instantiateButtons");
+        
+        //set listener
+        task.setOnResultsListener(this);
     }
 
     /**
@@ -181,20 +185,23 @@ public class Registration5EmailActivity extends Activity {
     
     OnClickListener mContinueButtonListener = new OnClickListener(){
     	public void onClick(View v) {
-    		Log.d(TAG,"...mContinueButtonListener onClick");
-       		Intent i = new Intent(Registration5EmailActivity.this, ProfileActivity.class);
-    		Log.d(TAG,"new Intent");
-    		i.putExtra("fName", firstNameIn);
-    		i.putExtra("lName", lastNameIn);
-			i.putExtra("mClass", classIdIn);
-			i.putExtra("mMass", massIn);
-			i.putExtra("mEmail", email.getText().toString());
-			i.putExtra("mPass", passwordIn);
-			i.putExtra("mRfid", rfidIn);
-    		//i.putExtra("pword",password.getText().toString());
-    		Log.d(TAG,"startActivity...");
-    		Registration5EmailActivity.this.startActivity(i);
-    		Log.d(TAG,"...startActivity");
+ 		    task.cancel(true);
+		    //create a new async task for every time you hit login (each can only run once ever)
+		   	task = new SciGamesHttpPoster(Registration5EmailActivity.this,"http://mysweetwebsite.com/push/update_email.php");
+		    //set listener
+	        task.setOnResultsListener(Registration5EmailActivity.this);
+	        		
+
+			//prepare key value pairs to send
+			String[] keyVals = {"student_id", studentIdIn, "visit_id", visitIdIn, "email", email.getText().toString()}; 
+			Log.d(TAG,"keyVals passed: ");
+			Log.d(TAG, "student_id:"+ studentIdIn+ " , visit_id:"+ visitIdIn+ " , email:"+ email.getText().toString());
+			
+			//create AsyncTask, then execute
+			//AsyncTask<String, Void, JSONObject> serverResponse = null;
+			//serverResponse = task.execute(keyVals);
+			task.execute(keyVals);
+			Log.d(TAG,"...task.execute(keyVals)");
     		
     	}
     };
@@ -230,7 +237,57 @@ public class Registration5EmailActivity extends Activity {
             }
         }
     return ret;
-    }    
+    }
+
+	public void onResultsSucceeded(String[] serverResponseStrings,
+			JSONObject serverResponseJSON) throws JSONException {
+		Log.d(TAG, "LOGIN SUCCEEDED: ");
+		for(int i=0; i<serverResponseStrings.length; i++){ //just print everything returned as a String[] for fun
+			Log.d(TAG, "["+i+"] "+serverResponseStrings[i]);
+		}
+		
+		JSONObject thisStudent = serverResponseJSON.getJSONObject("student");
+		
+		String cartLevel = thisStudent.getString("cart_game_level");
+		String slideLevel = thisStudent.getString("slide_game_level");
+		String mass = thisStudent.getString("mass");
+		String photoUrl = thisStudent.getString("photo");
+		String firstName = thisStudent.getString("first_name");
+		String lastName = thisStudent.getString("last_name");
+		String email = thisStudent.getString("email");
+		String pw = thisStudent.getString("pw");
+		String classId = thisStudent.getString("class_id");
+		String rfid = thisStudent.getString("current_rfid");
+		
+		Log.d(TAG, "this student: ");
+		Log.d(TAG, thisStudent.toString());
+		
+		Log.d(TAG,"...onResultsSucceeded");
+		/****** PROFILE ACTIVITY INTENT ******/
+		Intent i = new Intent(Registration5EmailActivity.this, ProfileActivity.class);
+		Log.d(TAG,"new Intent");
+		i.putExtra("fName",firstName);
+		i.putExtra("lName",lastName);
+		i.putExtra("photoUrl", photoUrl);
+		i.putExtra("mass", mass);
+		i.putExtra("cartLevel", cartLevel);
+		i.putExtra("slideLevel", cartLevel);
+		i.putExtra("email", email);
+		i.putExtra("rfid", rfid);
+		i.putExtra("password",pw);
+		i.putExtra("classId",classId);
+		i.putExtra("studentId",serverResponseStrings[0]);
+		i.putExtra("visitId",serverResponseStrings[1]);
+		Registration5EmailActivity.this.startActivity(i);
+		Log.d(TAG,"...startActivity");
+		/****** PROFILE ACTIVITY INTENT ******/
+		
+	}
+
+	public void failedQuery(String failureReason) {
+		// TODO Auto-generated method stub
+		
+	}    
 }
     
 

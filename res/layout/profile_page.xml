@@ -20,100 +20,11 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp" >
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="230dp"
-        android:layout_marginLeft="482dp"
-        android:contentDescription="@string/logo"
-        android:src="@drawable/violet" />
-
-    <TextView
-        android:id="@+id/rfid"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:text="@string/profile_rfid"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/password"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/rfid"
-        android:layout_centerVertical="true"
-        android:text="@string/profile_password"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/password"
-        android:text="@string/profile_email"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/mass"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/email"
-        android:text="@string/profile_mass"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/class_id"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/mass"
-        android:layout_alignLeft="@+id/email"
-        android:text="@string/profile_classid"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/teacher_name"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/class_id"
-        android:layout_alignLeft="@+id/mass"
-        android:text="@string/profile_teacher_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/school_name"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/teacher_name"
-        android:layout_alignLeft="@+id/teacher_name"
-        android:text="@string/profile_school_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/last_name"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/school_name"
-        android:layout_alignLeft="@+id/class_id"
-        android:text="@string/profile_last_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/first_name"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/last_name"
-        android:layout_alignLeft="@+id/last_name"
-        android:text="@string/profile_first_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <TextView
         android:id="@+id/greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/school_name"
         android:layout_marginTop="28dp"
         android:text="@string/greeting"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -122,10 +33,111 @@
         android:id="@+id/sentence1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/password"
         android:layout_below="@+id/greeting"
         android:layout_marginTop="29dp"
         android:text="@string/profile_sentence1"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/first_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/sentence1"
+        android:layout_below="@+id/sentence1"
+        android:layout_marginTop="40dp"
+        android:text="@string/profile_first_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/last_name"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/first_name"
+        android:layout_below="@+id/first_name"
+        android:text="@string/profile_last_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/school_name"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/last_name"
+        android:layout_below="@+id/last_name"
+        android:text="@string/profile_school_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/teacher_name"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/school_name"
+        android:layout_below="@+id/school_name"
+        android:text="@string/profile_teacher_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/class_id"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/teacher_name"
+        android:layout_below="@+id/teacher_name"
+        android:text="@string/profile_classid"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/mass"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/class_id"
+        android:layout_below="@+id/class_id"
+        android:text="@string/profile_mass"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mass"
+        android:layout_below="@+id/mass"
+        android:text="@string/profile_email"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/mass"
+        android:layout_below="@+id/email"
+        android:text="@string/profile_password"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/rfid"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/email"
+        android:layout_below="@+id/password"
+        android:text="@string/profile_rfid"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="240dp"
+        android:layout_height="320dp"
+        android:layout_below="@+id/rfid"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="102dp"
+        android:contentDescription="@string/img_descrip" />
+
+    <Button
+        android:id="@+id/done"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rfid"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginLeft="21dp"
+        android:layout_marginTop="34dp"
+        android:textSize="30sp"
+        android:text="Done" />
 
 </RelativeLayout>

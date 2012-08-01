@@ -54,6 +54,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -71,14 +72,13 @@ import com.scigames.slidegame.SciGamesHttpPoster;
  */
 public class Registration1UserNameActivity extends Activity implements SciGamesListener{
 
-    
     static final private int BACK_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
 
     private String firstNameIn = "FNAME";
     private String lastNameIn = "LNAME";
-    private String passwordIn = "PWORD";
-    private String classIdIn = "CLASSID";
+    private String studentIdIn = "STUDENTID";
+    private String visitIdIn = "STUDENTID";
     
     private EditText firstName;
     private EditText lastName;
@@ -97,15 +97,16 @@ public class Registration1UserNameActivity extends Activity implements SciGamesL
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
     	Log.d(TAG,"super.OnCreate");
+    	
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         Intent i = getIntent();
-        Log.d(TAG,"getIntent");
-    	firstNameIn = i.getStringExtra("fName");
-    	lastNameIn = i.getStringExtra("lName");
-    	passwordIn = i.getStringExtra("pword");
-    	classIdIn = i.getStringExtra("mClass");
+        Log.d(TAG,"...getIntent");
+//    	firstNameIn = i.getStringExtra("fName");
+//    	lastNameIn = i.getStringExtra("lName");
+//    	studentIdIn = i.getStringExtra("studentId");
+//    	visitIdIn = i.getStringExtra("visitId");
     	Log.d(TAG,"...getStringExtra");
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.registration1_username);
@@ -118,26 +119,27 @@ public class Registration1UserNameActivity extends Activity implements SciGamesL
         firstName.setOnTouchListener(new View.OnTouchListener() {
   			//@Override
 			public boolean onTouch(View v, MotionEvent event) {
-	        firstName.setInputType(InputType.TYPE_CLASS_TEXT);
-	        firstName.onTouchEvent(event); // call native handler
-	        return true; // consume touch even
+				firstName.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+		        firstName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		        firstName.onTouchEvent(event); // call native handler
+		        return true; // consume touch even
 			} 
         });
         lastName = (EditText) findViewById(R.id.last_name);
-        //password = (EditText) findViewById(R.id.password);
+        password = (EditText) findViewById(R.id.password);
         Log.d(TAG,"...instantiateEditTexts");
         
         // Hook up button presses to the appropriate event handler.
         ((Button) findViewById(R.id.back)).setOnClickListener(mBackListener);
-        ((Button) findViewById(R.id.clear)).setOnClickListener(mClearListener);
+        //((Button) findViewById(R.id.clear)).setOnClickListener(mClearListener);
         ((Button) findViewById(R.id.continue_button)).setOnClickListener(mContinueButtonListener);
         Log.d(TAG,"...instantiateButtons");
         
         //set info to what we know already
-        firstName.setText(firstNameIn);
-        lastName.setText(lastNameIn);
+        //firstName.setText(firstNameIn);
+        //lastName.setText(lastNameIn);
         //password.setText(passwordIn);
-        Log.d(TAG,"...setTexts with incoming name/pw");
+        //Log.d(TAG,"...setTexts with incoming name/pw");
         
         //set listener
         task.setOnResultsListener(this);
@@ -229,8 +231,8 @@ public class Registration1UserNameActivity extends Activity implements SciGamesL
 		   	task = new SciGamesHttpPoster(Registration1UserNameActivity.this,"http://mysweetwebsite.com/push/register_player.php");
 		    //set listener
 	        task.setOnResultsListener(Registration1UserNameActivity.this);	
-   					
-			String[] keyVals = {"first_name", firstName.getText().toString(), "last_name", lastName.getText().toString()};
+   			
+			String[] keyVals = {"first_name", firstName.getText().toString(), "last_name", lastName.getText().toString(), "pw", password.getText().toString()};
 			AsyncTask<String, Void, JSONObject> serverResponse = null;
 			serverResponse = task.execute(keyVals);
 
@@ -296,7 +298,7 @@ public class Registration1UserNameActivity extends Activity implements SciGamesL
     //---- this function hides the keyboard when the user clicks outside of keyboard when it's open!
     @Override 
     public boolean dispatchTouchEvent(MotionEvent event) {
-
+         
         View v = getCurrentFocus();
         boolean ret = super.dispatchTouchEvent(event);
 
@@ -317,19 +319,29 @@ public class Registration1UserNameActivity extends Activity implements SciGamesL
     return ret;
     }
 
-	public void onResultsSucceeded(String[] serverResponse,
+	public void onResultsSucceeded(String[] serverResponseStrings,
 			JSONObject serverResponseJSON) throws JSONException {
 		// TODO Auto-generated method stub
-		Log.d(TAG, "LOGIN SUCCEEDED: ");
-		for(int i=0; i<serverResponse.length; i++){ //just print everything returned as a String[] for fun
-			Log.d(TAG, "["+i+"] "+serverResponse[i]);
+		Log.d(TAG, "REGISTER SUCCEEDED: ");
+		for(int i=0; i<serverResponseStrings.length; i++){ //just print everything returned as a String[] for fun
+			Log.d(TAG, "["+i+"] "+serverResponseStrings[i]);
 		}
-		JSONObject thisStudent;
-
-		thisStudent = serverResponseJSON.getJSONObject("student");
+//		JSONObject thisStudent = serverResponseJSON.getJSONObject("student");
+//		String firstName = thisStudent.getString("first_name");
+//		String lastName = thisStudent.getString("last_name");
+//		Log.d(TAG, "this student: ");
+//		Log.d(TAG, thisStudent.toString());
 		
-		Log.d(TAG, "this student: ");
-		Log.d(TAG, thisStudent.toString());
+		/****** RFID ACTIVITY INTENT ******/
+		Intent i = new Intent(Registration1UserNameActivity.this, Registration2RFIDActivity.class); //THIS IS THE CORRECT PAGE
+		Log.d(TAG,"new Intent");
+		i.putExtra("fName",serverResponseStrings[2]);
+		i.putExtra("lName",serverResponseStrings[3]);
+		i.putExtra("studentId",serverResponseStrings[0]);
+		i.putExtra("visitId",serverResponseStrings[1]);
+		Registration1UserNameActivity.this.startActivity(i);
+		Log.d(TAG,"...startActivity");
+		/**********************************/
 	}
 
 	public void failedQuery(String failureReason) {

@@ -19,25 +19,24 @@
     android:orientation="horizontal"
     android:paddingLeft="10dp"
     android:paddingTop="10dp" >
-   
+
     <TextView
         android:id="@+id/tell_us"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        
+        android:layout_marginLeft="50dp"
         android:layout_marginRight="21dp"
-		android:layout_marginLeft="50dp"
         android:layout_marginTop="100dp"
         android:lineSpacingExtra="25dp"
         android:text="@string/tell_us_about_you"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-    
+
     <EditText
         android:id="@+id/first_name"
         android:layout_width="200dip"
         android:layout_height="50dip"
-        android:layout_marginLeft="170dip"
+        android:layout_marginLeft="120dip"
         android:layout_marginTop="450dip"
         android:ems="10"
         android:freezesText="true"
@@ -56,10 +55,21 @@
         android:ems="10"
         android:freezesText="true"
         android:hint="@string/last_name"
-        android:imeOptions="actionDone"
+        android:imeOptions="actionNext"
         android:inputType="textNoSuggestions|textPersonName|textCapWords" />
-
-<!--   
+    
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/first_name"
+        android:layout_below="@+id/first_name"
+        android:layout_marginTop="39dp"
+        android:imeOptions="actionDone"
+        android:hint="Password"
+        android:inputType="textNoSuggestions"
+        android:ems="10" />
+    <!--
 	<EditText
         android:id="@+id/password"
         android:layout_width="400dp"
@@ -71,43 +81,14 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textEmailAddress" />
--->   
-
-    <Button
-        android:id="@+id/continue_button"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@+id/first_name"
-        android:layout_below="@+id/first_name"
-        android:layout_marginBottom="80dp"
-        android:text="@string/continue_button" />
+    -->
     <!--
         android:background="@drawable/obama" 
         android:layout_marginLeft ="5dp"
     -->
 
-    <Button
-        android:id="@+id/clear"
-        style="@style/ActionButton"
-        android:layout_alignBaseline="@+id/continue_button"
-        android:layout_alignBottom="@+id/continue_button"
-        android:layout_marginLeft="35dp"
-        android:layout_toRightOf="@+id/continue_button"
-        android:text="@string/clear"
-        android:textColor="@color/red" />
-    
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/clear"
-        android:layout_alignRight="@+id/last_name"
-        android:layout_toRightOf="@+id/clear"
-        android:contentDescription="@string/logo"
-        android:src="@drawable/violet" />
-
-   <!-- <TextView
+    <!--
+    <TextView
         android:id="@+id/notascigamersentence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -138,7 +119,16 @@
         android:layout_alignLeft="@+id/tell_us"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="63dp"
-        android:text="@string/back" 
-        android:textColor="@color/lightGray"/>
+        android:text="@string/back"
+        android:textColor="@color/lightGray" />
+
+    <Button
+        android:id="@+id/continue_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/first_name"
+        android:layout_below="@+id/first_name"
+        android:layout_marginTop="147dp"
+        android:text="@string/continue_button" />
 
 </RelativeLayout>

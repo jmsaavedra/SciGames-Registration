@@ -21,8 +21,6 @@ import com.scigames.slidegame.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import java.io.ByteArrayOutputStream;
 
 import org.json.JSONException;
@@ -61,7 +59,7 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
     
     private Bitmap photo;
     
-    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://mysweetwebsite.com/push/student_mass.php");
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://mysweetwebsite.com/push/upload_image.php");
     
     
     public Registration4PhotoActivity() {
@@ -74,7 +72,8 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	Log.d(TAG,"super.OnCreate");
-    	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         Intent i = getIntent();
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
@@ -173,7 +172,7 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
         	Log.d(TAG, "...bitmapFactory.decodeResource");
 			ByteArrayOutputStream bao = new ByteArrayOutputStream();
 			Log.d(TAG, "...new bytearrayoutputstream");
-			bitmapOrg.compress(Bitmap.CompressFormat.JPEG, 90, bao);
+			bitmapOrg.compress(Bitmap.CompressFormat.JPEG, 100, bao); 
 			Log.d(TAG, "...bitmap0rd.compress");
 			byte [] ba = bao.toByteArray();
 			Log.d(TAG, "...toByteArray");
@@ -182,11 +181,11 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
 			String photoEncoded = Base64.encodeToString(ba, 0); //int here is "flags"
 			Log.d(TAG, "photoEncoded: ");
 			Log.d(TAG, photoEncoded);
-        	/*
+        		
         	//push picture back.-- photo
  		    task.cancel(true);
 		    //create a new async task for every time you hit login (each can only run once ever)
-		   	task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://mysweetwebsite.com/push/new_photo.php");
+		   	task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://mysweetwebsite.com/push/upload_image.php");
 		    //set listener
 	        task.setOnResultsListener(Registration4PhotoActivity.this);
 	        		
@@ -194,10 +193,11 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
 			String[] keyVals = {"student_id", studentIdIn, "visit_id", visitIdIn, "photo", photoEncoded}; 
 			
 			//create AsyncTask, then execute
+			@SuppressWarnings("unused")
 			AsyncTask<String, Void, JSONObject> serverResponse = null;
 			serverResponse = task.execute(keyVals);
 			Log.d(TAG,"...task.execute(keyVals)");
-    		*/
+    		
     	}
     };
     	
@@ -239,12 +239,15 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
 		
 		Log.d(TAG, "this student: ");
 		Log.d(TAG, thisStudent.toString());
-   		Intent i = new Intent(Registration4PhotoActivity.this, Registration5EmailActivity.class);
+   		Intent i = new Intent(Registration4PhotoActivity.this, Registration5EmailActivity.class); //THIS IS RIGHT
+		//Intent i = new Intent(Registration4PhotoActivity.this, ProfileActivity.class);
 		Log.d(TAG,"new Intent");
-		i.putExtra("fName",firstNameIn);
-		i.putExtra("lName",lastNameIn);
+		i.putExtra("fName",serverResponseStrings[2]);
+		i.putExtra("lName",serverResponseStrings[3]);
 		i.putExtra("studentId",serverResponseStrings[0]);
-		i.putExtra("visitId",serverResponseStrings[1]);
+		i.putExtra("mass",thisStudent.getString("mass"));
+		//i.putExtra("visitId",serverResponseStrings[1]);
+		i.putExtra("photoUrl", serverResponseStrings[1]);
 		Log.d(TAG,"startActivity...");
 		Registration4PhotoActivity.this.startActivity(i);
 		Log.d(TAG,"...startActivity");
@@ -252,8 +255,8 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
 	}
 
 	public void failedQuery(String failureReason) {
-		// TODO Auto-generated method stub
 		
+		Log.d(TAG, "LOGIN FAILED, REASON: " + failureReason);
 	} 
 }
     

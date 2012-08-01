@@ -44,6 +44,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -77,7 +78,7 @@ public class Registration3MassActivity extends Activity implements SciGamesListe
     
     private String myMass = "";
     
-    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration3MassActivity.this,"http://mysweetwebsite.com/push/new_mass.php");
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration3MassActivity.this,"http://mysweetwebsite.com/push/update_mass.php");
     
     
     public Registration3MassActivity() {
@@ -90,7 +91,8 @@ public class Registration3MassActivity extends Activity implements SciGamesListe
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	Log.d(TAG,"super.OnCreate");
-    	
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         Intent i = getIntent();
         Log.d(TAG,"getIntent");
     	firstNameIn = i.getStringExtra("fName");
@@ -204,7 +206,7 @@ public class Registration3MassActivity extends Activity implements SciGamesListe
     		
  		    task.cancel(true);
 		    //create a new async task for every time you hit login (each can only run once ever)
-		   	task = new SciGamesHttpPoster(Registration3MassActivity.this,"http://mysweetwebsite.com/push/new_mass.php");
+		   	task = new SciGamesHttpPoster(Registration3MassActivity.this,"http://mysweetwebsite.com/push/update_mass.php");
 		    //set listener
 	        task.setOnResultsListener(Registration3MassActivity.this);
 	        		

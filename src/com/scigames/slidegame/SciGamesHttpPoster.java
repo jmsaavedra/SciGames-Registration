@@ -148,7 +148,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     			listener.failedQuery(failureReason);
     		} else {
     			
-    			Log.d(TAG, "GOOD LOGIN: ");
+    			Log.d(TAG, "login GOOD query: ");
 				try {
 					parsedLoginInfo = parseThisLogin(response);
 					Log.d(TAG, "..set parsedLoginInfo:");
@@ -172,9 +172,9 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     			listener.failedQuery(failureReason);
     		} else {
     			
-    			Log.d(TAG, "GOOD LOGIN: ");
+    			Log.d(TAG, "Reg1 GOOD login: ");
 				try {
-					parsedLoginInfo = parseThisLogin(response);
+					parsedLoginInfo = parseThisStudent(response);
 					Log.d(TAG, "..set parsedLoginInfo:");
 					for(int i=0; i<parsedLoginInfo.length; i++){
 						Log.d(TAG, parsedLoginInfo[i]);
@@ -196,9 +196,9 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     			listener.failedQuery(failureReason);
     		} else {
     			
-    			Log.d(TAG, "GOOD LOGIN: ");
+    			Log.d(TAG, "Reg2 GOOD query: ");
 				try {
-					parsedLoginInfo = parseThisLogin(response);
+					parsedLoginInfo = parseThisStudent(response);
 					Log.d(TAG, "..set parsedLoginInfo:");
 					for(int i=0; i<parsedLoginInfo.length; i++){
 						Log.d(TAG, parsedLoginInfo[i]);
@@ -208,7 +208,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 					listener.onResultsSucceeded(parsedLoginInfo, response);//send both String[] and raw JSON
 					Log.d(TAG, "listener.onResultsSucceeded");
 				} catch (JSONException e) {
-					Log.d(TAG, "failed at parsedThisLogin");
+					Log.d(TAG, "failed at parsedThisStudent");
 					e.printStackTrace();
 				}
     		}
@@ -220,9 +220,9 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     			listener.failedQuery(failureReason);
     		} else {
     			
-    			Log.d(TAG, "GOOD LOGIN: ");
+    			Log.d(TAG, "3Mass GOOD query: ");
 				try {
-					parsedLoginInfo = parseThisLogin(response);
+					parsedLoginInfo = parseThisStudent(response);
 					Log.d(TAG, "..set parsedLoginInfo:");
 					for(int i=0; i<parsedLoginInfo.length; i++){
 						Log.d(TAG, parsedLoginInfo[i]);
@@ -244,9 +244,9 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     			listener.failedQuery(failureReason);
     		} else {
     			
-    			Log.d(TAG, "GOOD LOGIN: ");
+    			Log.d(TAG, "Reg4 GOOD query: ");
 				try {
-					parsedLoginInfo = parseThisLogin(response);
+					parsedLoginInfo = parseThisStudent(response);
 					Log.d(TAG, "..set parsedLoginInfo:");
 					for(int i=0; i<parsedLoginInfo.length; i++){
 						Log.d(TAG, parsedLoginInfo[i]);
@@ -268,9 +268,33 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     			listener.failedQuery(failureReason);
     		} else {
     			
-    			Log.d(TAG, "GOOD LOGIN: ");
+    			Log.d(TAG, "Reg5 GOOD query: ");
 				try {
-					parsedLoginInfo = parseThisLogin(response);
+					parsedLoginInfo = parseThisStudent(response);
+					Log.d(TAG, "..set parsedLoginInfo:");
+					for(int i=0; i<parsedLoginInfo.length; i++){
+						Log.d(TAG, parsedLoginInfo[i]);
+					}
+					Log.d(TAG, "full response: ");
+					Log.d(TAG, response.toString());
+					listener.onResultsSucceeded(parsedLoginInfo, response);//send both String[] and raw JSON
+					Log.d(TAG, "listener.onResultsSucceeded");
+				} catch (JSONException e) {
+					Log.d(TAG, "failed at parsedThisLogin");
+					e.printStackTrace();
+				}
+    		}
+    	}
+    	
+    	//profile activity
+    	else if (MyActivity.toString().startsWith("com.scigames.slidegame.ProfileActivity")){
+    		if(checkLoginFailed(response)){
+    			listener.failedQuery(failureReason);
+    		} else {
+    			
+    			Log.d(TAG, "profileActivity GOOD query: ");
+				try {
+					parsedLoginInfo = parseThisProfile(response);
 					Log.d(TAG, "..set parsedLoginInfo:");
 					for(int i=0; i<parsedLoginInfo.length; i++){
 						Log.d(TAG, parsedLoginInfo[i]);
@@ -330,7 +354,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 		} else {
 			studentId = response.getJSONObject("_id");
 			thisStudentId = studentId.getString("$id");
-			}
+		}
 		
 		Log.d(TAG, "thisStudentId: " + thisStudentId);
 		
@@ -342,8 +366,115 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 		}
 		return infoToSend;
     }
-}
+    
+    public String[] parseThisStudent(JSONObject response) throws JSONException{
+    	Log.d(TAG, "parseThisStudent:");
+		JSONObject student = null;
+		JSONObject studentId = null;
+		String thisStudentId = "null";
+		String thisStudentPhoto = "null";
+		String thisFirstName = "null";
+		String thisLastName = "null";
+		JSONObject visits = null;
+		JSONObject visitId = null;
+		String thisVisitId = "null";
+		
+//		if(response.has("visit")){
+//			visits = response.getJSONObject("visit");
+//			visitId = visits.getJSONObject("_id");
+//			thisVisitId = visitId.getString("$id");
+//			
+//			Log.d(TAG, "thisVisit: " + thisVisitId);
+//		}
+		
+		//String[] parsedStudent = null;
+		if(response.has("student")){
+			Log.d(TAG, "has student object:");
+			student = response.getJSONObject("student");
+			studentId = student.getJSONObject("_id");
+			thisStudentId = studentId.getString("$id");
+			thisFirstName = student.getString("first_name");
+			thisLastName = student.getString("last_name");
+			thisVisitId = student.getString("current_visit");
+			if(student.has("photo")){
+				thisStudentPhoto = student.getString("photo");
+			}
+		} else {
+			thisFirstName = response.getString("first_name");
+			thisLastName = response.getString("last_name");
+			if(response.has("_id")){
+				Log.d(TAG, "has id object:");
+				studentId = response.getJSONObject("_id");
+				thisStudentId = studentId.getString("$id");
+			}
+		}
+		
+		String[] parsedStudent = {thisStudentId, thisStudentPhoto, thisFirstName, thisLastName, thisVisitId};
+    	return parsedStudent;
+    }
 
+
+	public String[] parseThisProfile(JSONObject response) throws JSONException{
+		Log.d(TAG, "parseThisProfile:");
+		JSONObject student = null;
+		JSONObject studentId = null;
+		JSONObject visits = null;
+		
+		String thisStudentId = "null";
+		String thisFirstName = "null";
+		String thisLastName = "null";
+		String thisStudentPhoto = "null";
+		String thisVisitId = "null";
+		String cartLevel = "null";
+		String slideLevel = "null";
+		String mass = "null";
+		String email = "null";
+		String pw = "null";
+		String classId = "null";
+		String rfid = "null";
+		
+	//	if(response.has("visit")){
+	//		visits = response.getJSONObject("visit");
+	//		visitId = visits.getJSONObject("_id");
+	//		thisVisitId = visitId.getString("$id");
+	//		
+	//		Log.d(TAG, "thisVisit: " + thisVisitId);
+	//	}
+		
+		//String[] parsedStudent = null;
+		if(response.has("student")){
+			Log.d(TAG, "has student object:");
+			student = response.getJSONObject("student");
+			studentId = student.getJSONObject("_id");
+			thisStudentId = studentId.getString("$id");
+			thisFirstName = student.getString("first_name");
+			thisLastName = student.getString("last_name");
+			thisVisitId = student.getString("current_visit");
+			cartLevel = student.getString("cart_game_level");
+			slideLevel = student.getString("slide_game_level");
+			mass = student.getString("mass");
+			email = student.getString("email");
+			pw = student.getString("pw");
+			classId = student.getString("class_id");
+			rfid = student.getString("current_rfid");
+			if(student.has("photo")){
+				thisStudentPhoto = student.getString("photo");
+			}
+		} else {
+			thisFirstName = response.getString("first_name");
+			thisLastName = response.getString("last_name");
+			if(response.has("_id")){
+				Log.d(TAG, "has id object:");
+				studentId = response.getJSONObject("_id");
+				thisStudentId = studentId.getString("$id");
+			}
+		}
+		
+		String[] parsedProfile = {thisStudentId, thisStudentPhoto, thisFirstName, thisLastName, thisVisitId,
+									mass, email, classId, pw, rfid, slideLevel, cartLevel};
+		return parsedProfile;
+	}
+}
 
 
 // see http://androidsnippets.com/executing-a-http-post-request-with-httpclient    
