@@ -16,6 +16,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_photo"
     android:orientation="horizontal"
     android:paddingLeft="10dp"
     android:paddingTop="10dp" >
@@ -24,7 +25,7 @@
         android:background="@drawable/obama" 
         android:layout_marginLeft ="5dp"
     -->
-
+    <!--
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -35,17 +36,8 @@
         android:text="@string/photo_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/instructions"
-        android:layout_width="600dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/title"
-        android:layout_alignBottom="@+id/title"
-        android:layout_marginLeft="68dp"
-        android:layout_toRightOf="@+id/title"
-        android:text="@string/photo_instructions"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    -->
     <!--
         <TextView
         android:id="@+id/greeting"
@@ -56,7 +48,7 @@
         android:layout_alignLeft="@+id/instructions"
         android:text="@string/greeting"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    -->
+    
 
     <Button
         android:id="@+id/back"
@@ -65,30 +57,70 @@
         android:layout_marginBottom="35dp"
         android:text="@string/back"
         android:textColor="@color/lightGray" />
+    -->
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="360dp"
-        android:layout_height="480dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:contentDescription="@string/img_descrip" />
-
-    <Button
+<!--     <Button
         android:id="@+id/continue_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/imageView1"
-        android:layout_marginTop="45dp"
-        android:text="@string/continue_button" />
-
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="37dp"
+        android:text="@string/continue_button" /> 
+        
+        android:layout_alignRight="@+id/avatar_photo"-->
+        
     <Button
         android:id="@+id/take_pic"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_above="@+id/imageView1"
-        android:layout_alignLeft="@+id/title"
-        android:layout_marginBottom="21dp"
-        android:text="@string/take_picture" />
+        android:layout_width="358px"
+        android:layout_height="111px"
+        android:layout_marginLeft="140dp"
+        android:layout_marginTop="725dp"
+        android:background="@drawable/btn_take_photo_off" />
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="217px"
+        android:layout_height="111px"
+		android:layout_marginBottom = "90dp"
+        android:layout_marginLeft="171px"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/btn_save_off" />
+
+
+    <TextView 
+        android:id="@+id/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="26dp"
+        android:layout_marginLeft="296dp"
+        android:layout_alignBottom="@+id/save_button"
+        android:text="@string/photo_instructions_or"
+        android:textSize="32px"
+        android:textColor="#ffffff"
+        android:background="@android:color/transparent"/>
+
+    <Button
+        android:id="@+id/retake_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/or"
+        android:layout_alignLeft="@+id/or"
+        android:layout_alignTop="@+id/or"
+        android:layout_marginLeft="34dp"
+        android:background="@android:color/transparent"
+        android:text="@string/photo_instructions_retake"
+        android:textColor="#000000"
+        android:textSize="32px" />
+
+    <ImageView
+        android:id="@+id/avatar_photo"
+        android:layout_width="300dip"
+        android:layout_height="400dip"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="350dp"
+        android:layout_marginLeft="100dp"
+        android:contentDescription="@string/img_descrip" />
 
 </RelativeLayout>

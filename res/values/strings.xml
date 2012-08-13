@@ -19,7 +19,7 @@
 
 <resources>
     <!-- app name -->
-    <string name="app_name">sciGames</string>
+    <string name="app_name">SG Registration</string>
     
     <!-- Buttons -->
     <string name="log_in">Let\'s Go!</string>
@@ -28,7 +28,7 @@
     <string name="quit">Quit</string>
     <string name="take_picture">Take Picture</string>
     <string name="done">Done</string>
-    <string name="please_register">Please Register >>></string>
+    <string name="please_register">Register now ›</string>
     <string name="continue_button">Continue</string>
     <string name="rfid_scan_button">Start Scan</string>
     <string name="mass_scan_button">Capture Mass</string>
@@ -51,23 +51,25 @@
     <string name="rfid_instructions">See that bracelet over there? Pick one up and scan it on the sensor below. 
         	Then put it on; you\’ll use it to capture all of your game play data."</string>
     <string name="mass_instructions">sciGames calculations are based on a player\’s mass. Please step on the scale and stand still. <i>Don\’t worry, we keep this private.</i></string>
-	<string name="photo_instructions">Let’s take a profile photo! Smile big!</string>
+	<string name="photo_instructions_or">or</string>
+	<string name="photo_instructions_retake"> retake ›</string>
+	
 	<string name="email_instructions">You can use your email address to play SciGames online and log in for your next playground visit.</string>
     <string name="img_descrip">your profile picture</string>
     <string name="greeting">Hi, %1$s %2$s! </string>
+    <string name="no_device">Please connect the SciGames Restration Station to this tablet and Log In!</string>
     
     <!--  Profile Page -->
     <string name="profile_sentence1">Here\'s your info:</string>
-    <string name="profile_first_name">First Name: %1$s</string>
-    <string name="profile_last_name">Last Name: %1$s</string>
-    <string name="profile_school_name">School Name: %1$s</string>
-    <string name="profile_teacher_name">Teacher Name: %1$s</string>
-    <string name="profile_classid">Class ID: %1$s</string>
-    <string name="profile_mass">Mass: %1$s</string>
-	<string name="profile_email">Email: %1$s</string>
-	<string name="profile_password">Password: %1$s</string>
-    <string name="profile_rfid">RFID: %1$s</string>
-    
+    <string name="profile_name">%1$s %2$s</string>
+    <string name="profile_school_name"> %1$s</string>
+    <string name="profile_teacher_name"> %1$s</string>
+    <string name="profile_classid"> %1$s</string>
+    <string name="profile_mass"> %1$s</string>
+	<string name="profile_email"> %1$s</string>
+	<string name="profile_password"> %1$s</string>
+    <string name="profile_rfid"> %1$s</string>
+    <string name="profile_classname"> %1$s</string>
     
     <!-- Place Holders -->
     <string name="logo">Logo</string>

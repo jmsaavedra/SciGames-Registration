@@ -24,61 +24,64 @@
      own application, the package name must be changed from "com.example.*"
      to come from a domain that you own or have control over. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.scigames.slidegame">
+    package="com.scigames.registration">
     
-    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="15"/>
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="16"/>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- This package contains an application...  The 'label' is the name
          to display to the user for the overall application, and provides
          a default label for all following components.  The syntax here is a
          reference to one of our string resources.-->
     <application android:label="@string/app_name"  
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-        android:icon="@drawable/scigames_icon">
-		<!-- android:theme="@style/NoActionBar" -->
-        <!-- An Activity in the application - this is something the user
-             can launch and interact with.  The "name" attribute is the
-             name of the class within your package that implements this
-             activity. -->
-        <activity android:name=".LoginActivity" android:label="@string/app_name" android:screenOrientation="portrait">
-            <!-- An IntentFilter tells the system when it should use your
-                 activity.  This allows the user to get to your activity
-                 without someone having to explicitly know to launch your
-                 class "com.examplel.android.skeletonapp.SkeletonActivity". -->
-            <intent-filter>
-                <!-- The MAIN action describes a main entry point into an
-                     activity, without any associated data. -->
-                <action android:name="android.intent.action.MAIN" />
-
-                <!-- This places this activity into the main app list. -->
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        android:icon="@drawable/scigames_icon" android:name=".ServiceADKApplication">
+        <uses-library android:name="com.android.future.usb.accessory" />
 	
+		<!-- android:theme="@style/NoActionBar" -->
+
+        <activity android:name=".LoginActivity" android:label="@string/app_name" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
         </activity>
+            
         <activity android:name=".Registration1UserNameActivity" android:label="User Name" android:screenOrientation="portrait"><!--  //android:windowSoftInputMode="stateVisible|adjustResize"> -->
         	<intent-filter>
             </intent-filter>
         </activity>
-        <activity android:name=".Registration2RFIDActivity" android:label="RFID" android:screenOrientation="portrait">
-        	<intent-filter>
-            </intent-filter>
-        </activity>
-        <activity android:name=".Registration3MassActivity" android:label="Mass" android:screenOrientation="portrait">
-        	<intent-filter>
-            </intent-filter>
-        </activity>
+        
         <activity android:name=".Registration4PhotoActivity" android:label="Profile Photo" android:screenOrientation="portrait">
         	<intent-filter>
             </intent-filter>
         </activity>
+        
         <activity android:name=".Registration5EmailActivity" android:label="Email Address" android:screenOrientation="portrait">
         	<intent-filter>
             </intent-filter>
         </activity>
+        
 		<activity android:name=".ProfileActivity" android:label="Profile" android:screenOrientation="portrait">
         	<intent-filter>
             </intent-filter>
-        </activity>         
+        </activity>
+                 
+        <activity android:name=".Registration2RfidMass_AdkServiceActivity" android:label="RFID and Mass" android:screenOrientation="portrait" android:launchMode="singleInstance">	
+        	<intent-filter>
+            </intent-filter>
+        </activity>
+        
+	   <activity android:name=".UsbAccessoryActivity" android:label="SciGames Registration"	android:taskAffinity="" android:launchMode="singleInstance">
+			<intent-filter>
+				<action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+			</intent-filter>
+
+			<meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+				android:resource="@xml/accessory_filter" />
+		</activity>
+		
+		<service android:name=".ADKService" />
     </application> 
 </manifest>
