@@ -19,31 +19,32 @@ public final class R {
     }
     public static final class drawable {
         public static final int background_holo_dark=0x7f020000;
-        public static final int bg_bracelet=0x7f020001;
-        public static final int bg_bracelet_allset=0x7f020002;
-        public static final int bg_done=0x7f020003;
-        public static final int bg_login=0x7f020004;
-        public static final int bg_mass=0x7f020005;
-        public static final int bg_mass_done=0x7f020006;
-        public static final int bg_oneoff=0x7f020007;
-        public static final int bg_photo=0x7f020008;
-        public static final int bg_profile=0x7f020009;
-        public static final int btn_capture_mass_off=0x7f02000a;
-        public static final int btn_capture_mass_tap=0x7f02000b;
-        public static final int btn_continue_off=0x7f02000c;
-        public static final int btn_continue_tap=0x7f02000d;
-        public static final int btn_done_off=0x7f02000e;
-        public static final int btn_login_off=0x7f02000f;
-        public static final int btn_login_tap=0x7f020010;
-        public static final int btn_save_off=0x7f020011;
-        public static final int btn_start_scan_off=0x7f020012;
-        public static final int btn_take_photo_off=0x7f020013;
-        public static final int btn_take_photo_tap=0x7f020014;
-        public static final int demokit_splash=0x7f020015;
-        public static final int scigames_icon=0x7f020016;
+        public static final int bg_blank=0x7f020001;
+        public static final int bg_bracelet=0x7f020002;
+        public static final int bg_bracelet_allset=0x7f020003;
+        public static final int bg_done=0x7f020004;
+        public static final int bg_login=0x7f020005;
+        public static final int bg_mass=0x7f020006;
+        public static final int bg_mass_done=0x7f020007;
+        public static final int bg_oneoff=0x7f020008;
+        public static final int bg_photo=0x7f020009;
+        public static final int bg_profile=0x7f02000a;
+        public static final int btn_capture_mass_off=0x7f02000b;
+        public static final int btn_capture_mass_tap=0x7f02000c;
+        public static final int btn_continue_off=0x7f02000d;
+        public static final int btn_continue_tap=0x7f02000e;
+        public static final int btn_done_off=0x7f02000f;
+        public static final int btn_login_off=0x7f020010;
+        public static final int btn_login_tap=0x7f020011;
+        public static final int btn_save_off=0x7f020012;
+        public static final int btn_start_scan_off=0x7f020013;
+        public static final int btn_take_photo_off=0x7f020014;
+        public static final int btn_take_photo_tap=0x7f020015;
+        public static final int demokit_splash=0x7f020016;
+        public static final int scigames_icon=0x7f020017;
         /**  Retrieved via Resources.getDrawable() and friends. 
          */
-        public static final int semi_black=0x7f020017;
+        public static final int semi_black=0x7f020018;
     }
     public static final class id {
         public static final int avatar_photo=0x7f08001b;

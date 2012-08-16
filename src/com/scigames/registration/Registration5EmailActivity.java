@@ -290,6 +290,12 @@ public class Registration5EmailActivity extends Activity implements SciGamesList
 		// TODO Auto-generated method stub
 		
 	}    
+	@Override
+	public void onBackPressed() {
+		//do nothing
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        
+	}
 }
     
 

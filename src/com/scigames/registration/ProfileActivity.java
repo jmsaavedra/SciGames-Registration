@@ -352,7 +352,12 @@ public class ProfileActivity extends Activity implements SciGamesListener{
             tv.setTypeface(tf);
         }
     }
-
+	@Override
+	public void onBackPressed() {
+		//do nothing
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        
+	}
 }
 
 

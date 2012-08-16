@@ -77,6 +77,8 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
     Button massCaptureButton;
     
     AlertDialog alertDialog;
+    AlertDialog infoDialog; //only used for debug
+    private boolean debug = true;
     
     ProgressDialog progressBar;
     private int progressBarStatus = 0;
@@ -106,13 +108,22 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 	    alertDialog.setTitle("No Registration System Attached ");
 	    alertDialog.setButton(RESULT_OK,"OK", new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int which) {
-	        // Write your code here to execute after dialog closed
-	        Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
-	        finish();
-//	        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//	        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//	        intent.putExtra("EXIT", true);
-//	        startActivity(intent);
+	        	//Write your code here to execute after dialog closed
+		        Toast.makeText(getApplicationContext(), "quitting", Toast.LENGTH_SHORT).show();
+		        finish();
+		        System.exit(0);
+	//	        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+	//	        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	//	        intent.putExtra("EXIT", true);
+	//	        startActivity(intent);
+	        }
+	    });
+	    
+		infoDialog = new AlertDialog.Builder(Registration2RfidMass_AdkServiceActivity.this).create();
+		infoDialog.setTitle("debug info! ");
+		infoDialog.setButton(RESULT_OK,"OK", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) {
+	        	Toast.makeText(getApplicationContext(), "ok!", Toast.LENGTH_SHORT).show();
 	        }
 	    });
         
@@ -186,6 +197,9 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 	    
         
         task.setOnResultsListener(this);
+        if(debug){infoDialog.setTitle("VisitIdIn");
+        infoDialog.setMessage(visitIdIn);
+        infoDialog.show();}
         
         Log.d(TAG, "...end OnCreate");
     }
@@ -211,17 +225,21 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
         Log.d(TAG,lastNameIn);
         studentIdIn = intent.getExtras().getString("studentId");
         Log.d(TAG,studentIdIn);
-        visitIdIn = this.getIntent().getExtras().getString("visitId");
+        visitIdIn = intent.getExtras().getString("visitId");
+        Log.d(TAG,visitIdIn);
+        //visitIdIn = this.getIntent().getExtras().getString("visitId");
         needsRfid = this.getIntent().getExtras().getString("needsRfid");
+        
+        if(debug){infoDialog.setTitle("VisitIdIn from New Intent");
+        infoDialog.setMessage(visitIdIn);
+        infoDialog.show();}
     }
     
     @Override
 	public void onResume() {
     	
     	Resources res = getResources();
-    	
-
-    	
+    		
     	if(needsRfid.equals("yes")){
     		Log.d(TAG,"needsRfid!");
     		haveRfid = false;
@@ -619,6 +637,11 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 	
 	/********* server querying ***********/
 	public void onResultsSucceeded(String[] serverResponseStrings, JSONObject serverResponseJSON) throws JSONException {
+		if(debug){
+			infoDialog.setTitle("Received from Server:");
+			infoDialog.setMessage(serverResponseJSON.toString());
+		}
+		
 		if (haveRfid == false){ 
 			Log.d(TAG, "RFID POST SUCCEEDED: ");
 			for(int i=0; i<serverResponseStrings.length; i++){ //just print everything returned as a String[] for fun
@@ -683,6 +706,12 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 	
 	public void failedQuery(String failureReason) {
 		Log.d(TAG, "LOGIN FAILED, REASON: " + failureReason);
+		infoDialog.setTitle("Bracelet Problem");
+		infoDialog.setMessage("Your bracelet is already being used by someone today! Try using a different one.");
+		infoDialog.show();
+		needsRfid = "yes";
+		haveRfid = false;
+		onResume();
 	}
 	
 	
@@ -769,7 +798,6 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 		    	   	//call setText here
 		        }
 			};
-
 	    };      
 	  
 		// progress bar simulator... will hold ADK stuff...
@@ -815,8 +843,10 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
  		   	task = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this,"http://mysweetwebsite.com/push/new_rfid.php");
  		    //set listener
  	        task.setOnResultsListener(Registration2RfidMass_AdkServiceActivity.this);
- 	        
- 	      //prepare key value pairs to send
+ 	        if(debug){infoDialog.setTitle("keyValuePairsSent:");
+ 	        infoDialog.setMessage("student_id"+":"+studentIdIn+","+"visit_id"+":"+visitIdIn+","+"rfid"+":"+braceletId.getText().toString());
+ 	        infoDialog.show();}
+ 	        //prepare key value pairs to send
  			String[] keyVals = {"student_id", studentIdIn, "visit_id", visitIdIn, "rfid", braceletId.getText().toString()}; 
  			Log.d(TAG,"keyVals passed: ");
  			Log.d(TAG, "student_id"+ studentIdIn+ "visit_id"+ visitIdIn+ "rfid"+ braceletId.getText().toString());
@@ -840,6 +870,11 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 		
 	}
 
-
+	@Override
+	public void onBackPressed() {
+		//do nothing
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        
+	}
  
 }

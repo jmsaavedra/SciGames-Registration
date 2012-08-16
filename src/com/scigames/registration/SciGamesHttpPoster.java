@@ -33,9 +33,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Window;
+import android.widget.Toast;
 
 public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 
@@ -56,12 +59,22 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     
     static public Activity MyActivity;
 
+    
+    AlertDialog infoDialog;
+    boolean debug = true;
+    
     SciGamesListener listener;  
     
     SciGamesHttpPoster(Activity a, String addr){
     	thisPostAddress = addr;
     	MyActivity = a;
-    	
+//		infoDialog = new AlertDialog.Builder(SciGamesHttpPoster.this).create();
+//		infoDialog.setTitle("debug info! ");
+//		infoDialog.setButton(RESULT_OK,"OK", new DialogInterface.OnClickListener() {
+//	        public void onClick(DialogInterface dialog, int which) {
+//	        //Toast.makeText(getApplicationContext(), "ok!", Toast.LENGTH_SHORT).show();
+//	        }
+//	    });     
     }
     
 	public void run() {
@@ -146,6 +159,10 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
     	Log.d(TAG, MyActivity.toString());
     	//check which activity called this task
     	//login activity
+    	if(debug){
+//    		infoDialog.setTitle("FULL SERVER RESPONSE:");
+//    		infoDialog.setMessage(response.toString());
+    	}
     	if (MyActivity.toString().startsWith("com.scigames.registration.LoginActivity")){ 
     		if(checkLoginFailed(response)){
     			listener.failedQuery(failureReason);
