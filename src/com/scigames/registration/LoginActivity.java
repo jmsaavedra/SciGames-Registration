@@ -238,6 +238,21 @@ public class LoginActivity extends Activity implements SciGamesListener{
 		Log.d(TAG, "this student: ");
 		Log.d(TAG, thisStudent.toString());
 		
+		//if(debug){
+//		alertDialog.setTitle("incoming:");
+//		alertDialog.setMessage("active: " + serverResponseStrings[2] +
+//				"      cartLevel: " + cartLevel + 
+//				"      slideLevel: " + slideLevel + 
+//				"      mass: " + mass + 
+//				"      firstName: " + firstName + 
+//				"      lastName: " + lastName + 
+//				"      pw: " + pw + 
+//				"      classId: " + classId + 
+//				"      rfid: " + rfid
+//				);
+//		alertDialog.show();
+		//{
+		
 		if(serverResponseStrings[2].equals("false")){ //check active state. if inactive for today, get RFID
 			Log.d(TAG, "off to RFID page!");
 			

@@ -48,8 +48,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.scigames.registration.R;
+import com.scigames.registration.ProfileActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -111,6 +114,8 @@ public class ProfileActivity extends Activity implements SciGamesListener{
     
     Button Done;
     Button editPhoto;
+    
+    AlertDialog alertDialog;
     
     DownloadProfilePhoto photoTask = new DownloadProfilePhoto(ProfileActivity.this, "sUrl");
     SciGamesHttpPoster task = new SciGamesHttpPoster(ProfileActivity.this,"http://mysweetwebsite.com/pull/auth_student.php");
@@ -186,7 +191,21 @@ public class ProfileActivity extends Activity implements SciGamesListener{
         Done.setOnClickListener(mDone);
         setButtonFont(ExistenceLightOtf, Done);
 	    
-	   
+		alertDialog = new AlertDialog.Builder(
+		        ProfileActivity.this).create();
+	    // Setting Dialog Title
+	    alertDialog.setTitle("alert title");
+	    // Setting Dialog Message
+	    alertDialog.setMessage("alert message");
+	    // Setting Icon to Dialog
+	    //alertDialog.setIcon(R.drawable.tick);
+	
+	    alertDialog.setButton(RESULT_OK,"OK", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) {
+	        // Write your code here to execute after dialog closed
+	        //Toast.makeText(getApplicationContext(), "Check your login info!", Toast.LENGTH_SHORT).show();
+	        }
+	    });
         
       //set listener
         task.setOnResultsListener(this);
@@ -265,6 +284,17 @@ public class ProfileActivity extends Activity implements SciGamesListener{
 
 	public void onResultsSucceeded(String[] serverResponseStrings, JSONObject serverResponseJSON) throws JSONException {
 		
+		//for debugging:
+//		alertDialog.setTitle("incoming:");
+//		alertDialog.setMessage("active: " + serverResponseStrings[2] +
+//				"      mass: " + serverResponseStrings[5] + 
+//				"      firstName: " + serverResponseStrings[2] + 
+//				"      lastName: " + serverResponseStrings[3] + 
+//				"      pw: " + serverResponseStrings[8] + 
+//				"      classId: " + serverResponseStrings[14] + 
+//				"      rfid: " + serverResponseStrings[9]
+//				);
+//		alertDialog.show();
 		
 		//download photo
         ImageView profilePhoto = (ImageView) findViewById(R.id.imageView1);
@@ -318,6 +348,9 @@ public class ProfileActivity extends Activity implements SciGamesListener{
 	public void failedQuery(String failureReason) {
 
 		Log.d(TAG, "failedQuery in Profile Activity");
+		alertDialog.setTitle("failed query: ");
+		alertDialog.setMessage(failureReason);
+		alertDialog.show();
 	}      
     
 	//---- send to 'one-off' registration page

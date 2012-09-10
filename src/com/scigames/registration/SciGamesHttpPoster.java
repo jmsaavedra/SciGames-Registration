@@ -205,7 +205,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 					listener.onResultsSucceeded(parsedLoginInfo, response);//send both String[] and raw JSON
 					Log.d(TAG, "listener.onResultsSucceeded");
 				} catch (JSONException e) {
-					Log.d(TAG, "failed at parsedThisLogin");
+					Log.d(TAG, "failed at parseThisStudent");
 					e.printStackTrace();
 				}
     		}
@@ -254,7 +254,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 					listener.onResultsSucceeded(parsedLoginInfo, response);//send both String[] and raw JSON
 					Log.d(TAG, "listener.onResultsSucceeded");
 				} catch (JSONException e) {
-					Log.d(TAG, "failed at parsedThisLogin");
+					Log.d(TAG, "failed at parseThisStudent");
 					e.printStackTrace();
 				}
     		}
@@ -278,7 +278,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 					listener.onResultsSucceeded(parsedLoginInfo, response);//send both String[] and raw JSON
 					Log.d(TAG, "listener.onResultsSucceeded");
 				} catch (JSONException e) {
-					Log.d(TAG, "failed at parsedThisLogin");
+					Log.d(TAG, "failed at parseThisStudent");
 					e.printStackTrace();
 				}
     		}
@@ -302,7 +302,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 					listener.onResultsSucceeded(parsedLoginInfo, response);//send both String[] and raw JSON
 					Log.d(TAG, "listener.onResultsSucceeded");
 				} catch (JSONException e) {
-					Log.d(TAG, "failed at parsedThisLogin");
+					Log.d(TAG, "failed at parseThisStudent");
 					e.printStackTrace();
 				}
     		}
@@ -326,7 +326,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 					listener.onResultsSucceeded(parsedLoginInfo, response);//send both String[] and raw JSON
 					Log.d(TAG, "listener.onResultsSucceeded");
 				} catch (JSONException e) {
-					Log.d(TAG, "failed at parsedThisLogin");
+					Log.d(TAG, "failed at parseThisProfile");
 					e.printStackTrace();
 				}
     		}
@@ -507,7 +507,7 @@ public class SciGamesHttpPoster extends AsyncTask <String, Void, JSONObject> {
 		
 		if(response.has("teacher")){
 			teacher = response.getJSONObject("teacher");
-			teacherName = teacher.getString("first_name") + " " + teacher.getString("last_name");
+			if(teacher.has("first_name")) teacherName = teacher.getString("first_name") + " " + teacher.getString("last_name");
 		}
 		
 		String[] parsedProfile = {thisStudentId, thisStudentPhoto, thisFirstName, thisLastName, thisVisitId,

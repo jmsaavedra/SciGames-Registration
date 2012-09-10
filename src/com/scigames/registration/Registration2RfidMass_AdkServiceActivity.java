@@ -78,7 +78,7 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
     
     AlertDialog alertDialog;
     AlertDialog infoDialog; //only used for debug
-    private boolean debug = true;
+    private boolean debug = false;
     
     ProgressDialog progressBar;
     private int progressBarStatus = 0;
@@ -397,7 +397,8 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 						View thisView = findViewById(R.id.registration2_rfid_layout);
 						thisView.setBackgroundResource(R.drawable.bg_bracelet_allset);
 					} else {
-						setMass(fThisMass);
+						if(Integer.parseInt(fThisMass) < 15) setMass(String.valueOf(Math.round(45+Math.random()*30))); //for debugging < 15kg means no scale attached.
+						else setMass(fThisMass);
 						View thisView = findViewById(R.id.registration3_mass_layout);
 						thisView.setBackgroundResource(R.drawable.bg_mass_done);
 						Log.d(TAG,"...setMass");
