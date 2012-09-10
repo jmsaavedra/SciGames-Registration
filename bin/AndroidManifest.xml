@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- This file describes the code in the SkeletonApp package, which is
+     used by the system to determine how to start your application and
+     integrate it with the rest of the system.  -->
+
+<!-- Declare the contents of this Android application.  The namespace
+     attribute brings in the Android platform namespace, and the package
+     supplies a unique name for the application.  When writing your
+     own application, the package name must be changed from "com.example.*"
+     to come from a domain that you own or have control over. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.scigames.registration">
+    
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="16"/>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- This package contains an application...  The 'label' is the name
+         to display to the user for the overall application, and provides
+         a default label for all following components.  The syntax here is a
+         reference to one of our string resources.-->
+    <application android:label="@string/app_name"  
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        android:icon="@drawable/scigames_icon" android:name=".ServiceADKApplication">
+        <uses-library android:name="com.android.future.usb.accessory" />
+	
+		<!-- android:theme="@style/NoActionBar" -->
+
+        <activity android:name=".LoginActivity" android:label="@string/app_name" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+        </activity>
+            
+        <activity android:name=".Registration1UserNameActivity" android:label="User Name" android:screenOrientation="portrait"><!--  //android:windowSoftInputMode="stateVisible|adjustResize"> -->
+        	<intent-filter>
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".Registration4PhotoActivity" android:label="Profile Photo" android:screenOrientation="portrait">
+        	<intent-filter>
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".Registration5EmailActivity" android:label="Email Address" android:screenOrientation="portrait">
+        	<intent-filter>
+            </intent-filter>
+        </activity>
+        
+		<activity android:name=".ProfileActivity" android:label="Profile" android:screenOrientation="portrait">
+        	<intent-filter>
+            </intent-filter>
+        </activity>
+                 
+        <activity android:name=".Registration2RfidMass_AdkServiceActivity" android:label="RFID and Mass" android:screenOrientation="portrait" android:launchMode="singleInstance">	
+        	<intent-filter>
+            </intent-filter>
+        </activity>
+        
+	   <activity android:name=".UsbAccessoryActivity" android:label="SG Registration"	android:taskAffinity="" android:launchMode="singleInstance">
+			<intent-filter>
+				<action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+			</intent-filter>
+
+			<meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+				android:resource="@xml/accessory_filter" />
+		</activity>
+		
+		<service android:name=".ADKService" />
+    </application> 
+</manifest>

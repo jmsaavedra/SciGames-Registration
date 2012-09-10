@@ -13,9 +13,9 @@ int redAddr = 1;
 int greenAddr = 1;
 
 void greenOn(){
-  analogWrite(LED1_GREEN, 180);
-  analogWrite(LED1_RED, 0);
-  analogWrite(LED1_BLUE, 0);
+  analogWrite(LED1_GREEN, 80);
+  analogWrite(LED1_RED, 255);
+  analogWrite(LED1_BLUE, 255);
 }
 
 void blinkGreen(int numBlinks){
@@ -29,15 +29,15 @@ void blinkGreen(int numBlinks){
 }
 
 void blueOn(){
-  analogWrite(LED1_RED, 0);
-  analogWrite(LED1_GREEN, 0);
-  analogWrite(LED1_BLUE, 180);
+  analogWrite(LED1_RED, 255);
+  analogWrite(LED1_GREEN, 255);
+  analogWrite(LED1_BLUE, 50);
 }
 
 void redOn(){
-  analogWrite(LED1_RED, 180);
-  analogWrite(LED1_GREEN, 0);
-  analogWrite(LED1_BLUE, 0);
+  analogWrite(LED1_RED, 80);
+  analogWrite(LED1_GREEN, 255);
+  analogWrite(LED1_BLUE, 255);
 }
 
 void blueFader(){
@@ -60,9 +60,9 @@ void initLeds(){
 }
 
 void ledsOff(){
-  analogWrite(LED1_RED, 0);
-  analogWrite(LED1_GREEN, 0);
-  analogWrite(LED1_BLUE, 0);
+  analogWrite(LED1_RED, 255);
+  analogWrite(LED1_GREEN, 255);
+  analogWrite(LED1_BLUE, 255);
 }
 
 void allLeds( boolean state ){
@@ -73,9 +73,9 @@ void allLeds( boolean state ){
     analogWrite(LED1_BLUE, 100);
   }
   else {
-    analogWrite(LED1_RED, 0);
-    analogWrite(LED1_GREEN, 0);
-    analogWrite(LED1_BLUE, 0);
+    analogWrite(LED1_RED, 255);
+    analogWrite(LED1_GREEN, 255);
+    analogWrite(LED1_BLUE, 255);
   }
 }
 
