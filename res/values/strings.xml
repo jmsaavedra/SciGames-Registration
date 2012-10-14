@@ -36,7 +36,8 @@
     <!-- Text Fields -->
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="password">Class Password</string>
+    <string name="password">Class Key</string>
+    <string name="class_id">Class ID</string>
 	<string name="bracelet_id">Bracelet ID</string>
 	<string name="mass">Mass</string>
     
@@ -78,6 +79,5 @@
     
     <!-- This is a complex string containing style runs. -->
     <string name="main_label">first name<u>th<ignore>e</ignore>re</u>, <i>you</i> <b>Activity</b>!</string>
-    <string name="class_id">ClassID</string>
 </resources>
 

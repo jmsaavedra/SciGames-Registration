@@ -44,6 +44,7 @@ import android.widget.Toast;
 
 public class Registration2RfidMass_AdkServiceActivity extends Activity implements Runnable, SciGamesListener{
     /** Called when the activity is first created. */
+    private boolean debug = false ; //if you don't have a board to attach and are just testing
     
 	private static final String TAG = "Registration2RfidMass_AdkServiceActivity";
 	
@@ -78,7 +79,7 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
     
     AlertDialog alertDialog;
     AlertDialog infoDialog; //only used for debug
-    private boolean debug = false;
+
     
     ProgressDialog progressBar;
     private int progressBarStatus = 0;
@@ -90,8 +91,8 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
     Typeface Museo500Regular;
     Typeface Museo700Regular;
     
-    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this, "http://mysweetwebsite.com/push/new_rfid.php");
-    //SciGamesHttpPoster MassTask = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this, "http://mysweetwebsite.com/push/update_mass.php");
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this, "http://db.scigam.es/push/new_rfid.php");
+    //SciGamesHttpPoster MassTask = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this, "http://db.scigam.es/push/update_mass.php");
     	
 	// ---------
 	// Lifecycle
@@ -309,12 +310,22 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 					}
 				}
 			}
-		} else {
+		} else if (!debug){
 			Log.d(TAG, "mAccessory is null");
 			Log.d(TAG, "NO ACCESSORY ATTACHED");
 			alertDialog.setMessage("Please Attach the Registration System to this Tablet and Login");
 			alertDialog.show();
 		
+		} else if (debug){
+			setBraceletId("testrfidstring"+String.valueOf(Math.random()*100));
+			Log.d(TAG,"...setBraceletId");
+			setTextViewFont(Museo300Regular, braceletId);
+			braceletId.setVisibility(View.VISIBLE);
+			rfidContinueButton.setVisibility(View.VISIBLE);
+			greets.setVisibility(View.INVISIBLE);
+			View thisView = findViewById(R.id.registration2_rfid_layout);
+			thisView.setBackgroundResource(R.drawable.bg_bracelet_allset);
+			
 		}
 		
 		// Let's update the textviews for easy debugging here...
@@ -424,7 +435,7 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 		massContinueButton.setVisibility(View.VISIBLE);
 		
 		massCaptureButton = (Button) findViewById(R.id.capture_mass);
-		massCaptureButton.setVisibility(View.INVISIBLE);
+		//massCaptureButton.setVisibility(View.INVISIBLE);
 
 	}
 		
@@ -818,7 +829,7 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
     		
  		    task.cancel(true);
 		    //create a new async task for every time you hit login (each can only run once ever)
-		   	task = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this,"http://mysweetwebsite.com/push/update_mass.php");
+		   	task = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this,"http://db.scigam.es/push/update_mass.php");
 		    //set listener
 	        task.setOnResultsListener(Registration2RfidMass_AdkServiceActivity.this);
 	        		
@@ -841,7 +852,7 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
   		  Log.d(TAG,"mRFIDContinueButtonListener.onClick");
  		    task.cancel(true);
  		    //create a new async task for every time you hit login (each can only run once ever)
- 		   	task = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this,"http://mysweetwebsite.com/push/new_rfid.php");
+ 		   	task = new SciGamesHttpPoster(Registration2RfidMass_AdkServiceActivity.this,"http://db.scigam.es/push/new_rfid.php");
  		    //set listener
  	        task.setOnResultsListener(Registration2RfidMass_AdkServiceActivity.this);
  	        if(debug){infoDialog.setTitle("keyValuePairsSent:");

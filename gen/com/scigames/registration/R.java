@@ -27,23 +27,27 @@ public final class R {
         public static final int bg_no_device=0x7f020006;
         public static final int bg_oneoff=0x7f020007;
         public static final int bg_photo=0x7f020008;
-        public static final int bg_profile=0x7f020009;
-        public static final int btn_capture_mass_off=0x7f02000a;
-        public static final int btn_capture_mass_tap=0x7f02000b;
-        public static final int btn_continue_off=0x7f02000c;
-        public static final int btn_continue_tap=0x7f02000d;
-        public static final int btn_done_off=0x7f02000e;
-        public static final int btn_login_off=0x7f02000f;
-        public static final int btn_login_tap=0x7f020010;
-        public static final int btn_save_off=0x7f020011;
-        public static final int btn_start_scan_off=0x7f020012;
+        public static final int bg_photo_no_avatar=0x7f020009;
+        public static final int bg_profile=0x7f02000a;
+        public static final int btn_capture_mass_off=0x7f02000b;
+        public static final int btn_capture_mass_tap=0x7f02000c;
+        public static final int btn_continue_off=0x7f02000d;
+        public static final int btn_continue_tap=0x7f02000e;
+        public static final int btn_done_off=0x7f02000f;
+        public static final int btn_login_off=0x7f020010;
+        public static final int btn_login_tap=0x7f020011;
+        public static final int btn_save_off=0x7f020012;
         public static final int btn_take_photo_off=0x7f020013;
         public static final int btn_take_photo_tap=0x7f020014;
-        public static final int demokit_splash=0x7f020015;
-        public static final int scigames_icon=0x7f020016;
+        public static final int done_btn_off=0x7f020015;
+        public static final int edit_btn=0x7f020016;
+        public static final int save_tap=0x7f020017;
+        public static final int scigames_icon=0x7f020018;
         /**  Retrieved via Resources.getDrawable() and friends. 
          */
-        public static final int semi_black=0x7f020017;
+        public static final int semi_black=0x7f02001b;
+        public static final int start_scan_off=0x7f020019;
+        public static final int start_scan_tap=0x7f02001a;
     }
     public static final class id {
         public static final int avatar_photo=0x7f08001a;
@@ -92,60 +96,60 @@ public final class R {
          */
         public static final int app_name=0x7f060000;
         public static final int back=0x7f060002;
-        public static final int bracelet_id=0x7f06000e;
-        public static final int class_id=0x7f06002b;
+        public static final int bracelet_id=0x7f06000f;
+        public static final int class_id=0x7f06000e;
         public static final int clear=0x7f060003;
         public static final int continue_button=0x7f060008;
         public static final int done=0x7f060006;
-        public static final int email_instructions=0x7f06001b;
-        public static final int email_title=0x7f060016;
+        public static final int email_instructions=0x7f06001c;
+        public static final int email_title=0x7f060017;
         /**  Text Fields 
          */
         public static final int first_name=0x7f06000b;
-        public static final int greeting=0x7f06001d;
-        public static final int img_descrip=0x7f06001c;
+        public static final int greeting=0x7f06001e;
+        public static final int img_descrip=0x7f06001d;
         public static final int last_name=0x7f06000c;
         /**  Buttons 
          */
         public static final int log_in=0x7f060001;
         /**  Place Holders 
          */
-        public static final int logo=0x7f060029;
+        public static final int logo=0x7f06002a;
         /**  This is a complex string containing style runs. 
          */
-        public static final int main_label=0x7f06002a;
-        public static final int mass=0x7f06000f;
-        public static final int mass_instructions=0x7f060018;
+        public static final int main_label=0x7f06002b;
+        public static final int mass=0x7f060010;
+        public static final int mass_instructions=0x7f060019;
         public static final int mass_scan_button=0x7f06000a;
-        public static final int mass_title=0x7f060014;
-        public static final int no_device=0x7f06001e;
-        public static final int not_a_scigamer=0x7f060011;
+        public static final int mass_title=0x7f060015;
+        public static final int no_device=0x7f06001f;
+        public static final int not_a_scigamer=0x7f060012;
         public static final int password=0x7f06000d;
-        public static final int photo_instructions_or=0x7f060019;
-        public static final int photo_instructions_retake=0x7f06001a;
-        public static final int photo_title=0x7f060015;
+        public static final int photo_instructions_or=0x7f06001a;
+        public static final int photo_instructions_retake=0x7f06001b;
+        public static final int photo_title=0x7f060016;
         public static final int please_register=0x7f060007;
-        public static final int profile_classid=0x7f060023;
-        public static final int profile_classname=0x7f060028;
-        public static final int profile_email=0x7f060025;
-        public static final int profile_mass=0x7f060024;
-        public static final int profile_name=0x7f060020;
-        public static final int profile_password=0x7f060026;
-        public static final int profile_rfid=0x7f060027;
-        public static final int profile_school_name=0x7f060021;
+        public static final int profile_classid=0x7f060024;
+        public static final int profile_classname=0x7f060029;
+        public static final int profile_email=0x7f060026;
+        public static final int profile_mass=0x7f060025;
+        public static final int profile_name=0x7f060021;
+        public static final int profile_password=0x7f060027;
+        public static final int profile_rfid=0x7f060028;
+        public static final int profile_school_name=0x7f060022;
         /**   Profile Page 
          */
-        public static final int profile_sentence1=0x7f06001f;
-        public static final int profile_teacher_name=0x7f060022;
+        public static final int profile_sentence1=0x7f060020;
+        public static final int profile_teacher_name=0x7f060023;
         public static final int quit=0x7f060004;
-        public static final int rfid_instructions=0x7f060017;
+        public static final int rfid_instructions=0x7f060018;
         public static final int rfid_scan_button=0x7f060009;
-        public static final int rfid_title=0x7f060013;
+        public static final int rfid_title=0x7f060014;
         public static final int take_picture=0x7f060005;
-        public static final int tell_us_about_you=0x7f060012;
+        public static final int tell_us_about_you=0x7f060013;
         /**   Messages 
          */
-        public static final int welcome_note=0x7f060010;
+        public static final int welcome_note=0x7f060011;
     }
     public static final class style {
         public static final int ActionButton=0x7f070000;

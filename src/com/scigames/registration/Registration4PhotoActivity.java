@@ -73,7 +73,7 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
     
     private Bitmap photo;
     
-    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://mysweetwebsite.com/push/upload_image.php");
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://db.scigam.es/push/upload_image.php");
     
     
     public Registration4PhotoActivity() {
@@ -218,7 +218,7 @@ public class Registration4PhotoActivity extends Activity implements SciGamesList
         	//push picture back.-- photo
  		    task.cancel(true);
 		    //create a new async task for every time you hit login (each can only run once ever)
-		   	task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://mysweetwebsite.com/push/upload_image.php");
+		   	task = new SciGamesHttpPoster(Registration4PhotoActivity.this,"http://db.scigam.es/push/upload_image.php");
 		    //set listener
 	        task.setOnResultsListener(Registration4PhotoActivity.this);
 	        		

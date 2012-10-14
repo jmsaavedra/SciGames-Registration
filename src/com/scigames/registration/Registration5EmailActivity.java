@@ -71,7 +71,7 @@ public class Registration5EmailActivity extends Activity implements SciGamesList
     private String visitIdIn = "VISITID";
     private EditText email;
     //private String passwordIn = "PWORD";;
-    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration5EmailActivity.this,"http://mysweetwebsite.com/push/update_email.php");
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration5EmailActivity.this,"http://db.scigam.es/push/update_email.php");
     
     public Registration5EmailActivity() {
     	
@@ -189,7 +189,7 @@ public class Registration5EmailActivity extends Activity implements SciGamesList
     	public void onClick(View v) {
  		    task.cancel(true);
 		    //create a new async task for every time you hit login (each can only run once ever)
-		   	task = new SciGamesHttpPoster(Registration5EmailActivity.this,"http://mysweetwebsite.com/push/update_email.php");
+		   	task = new SciGamesHttpPoster(Registration5EmailActivity.this,"http://db.scigam.es/push/update_email.php");
 		    //set listener
 	        task.setOnResultsListener(Registration5EmailActivity.this);
 	        		

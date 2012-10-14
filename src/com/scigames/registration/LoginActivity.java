@@ -66,7 +66,7 @@ public class LoginActivity extends Activity implements SciGamesListener{
     
     ProgressDialog progressBar;
     AlertDialog alertDialog;
-    SciGamesHttpPoster task = new SciGamesHttpPoster(LoginActivity.this,"http://mysweetwebsite.com/pull/auth_student.php");
+    SciGamesHttpPoster task = new SciGamesHttpPoster(LoginActivity.this,"http://db.scigam.es/pull/auth_student.php");
 	
 //
 //	protected void hideControls() {
@@ -186,7 +186,7 @@ public class LoginActivity extends Activity implements SciGamesListener{
 		    if (isNetworkAvailable()){
 			    task.cancel(true);
 			    //create a new async task for every time you hit login (each can only run once ever)
-			   	task = new SciGamesHttpPoster(LoginActivity.this,"http://mysweetwebsite.com/pull/auth_student.php");
+			   	task = new SciGamesHttpPoster(LoginActivity.this,"http://db.scigam.es/pull/auth_student.php");
 			    //set listener
 		        task.setOnResultsListener(LoginActivity.this);
 		        

@@ -89,7 +89,7 @@ public class Registration1UserNameActivity extends Activity implements SciGamesL
     private EditText password_confirm;
     private String TAG = "Registration1Activity";
     
-    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration1UserNameActivity.this,"http://mysweetwebsite.com/push/register_player.php");
+    SciGamesHttpPoster task = new SciGamesHttpPoster(Registration1UserNameActivity.this,"http://db.scigam.es/push/register_player.php");
     AlertDialog alertDialog;
     
     public Registration1UserNameActivity() {
@@ -242,7 +242,7 @@ public class Registration1UserNameActivity extends Activity implements SciGamesL
 	   			if(password.getText().toString().equals(password_confirm.getText().toString())){
 				    task.cancel(true);
 				    //create a new async task for every time you hit login (each can only run once ever)
-				   	task = new SciGamesHttpPoster(Registration1UserNameActivity.this,"http://mysweetwebsite.com/push/register_player.php");
+				   	task = new SciGamesHttpPoster(Registration1UserNameActivity.this,"http://db.scigam.es/push/register_player.php");
 				    //set listener
 			        task.setOnResultsListener(Registration1UserNameActivity.this);	
 		   			

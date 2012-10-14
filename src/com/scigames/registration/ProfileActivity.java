@@ -118,7 +118,7 @@ public class ProfileActivity extends Activity implements SciGamesListener{
     AlertDialog alertDialog;
     
     DownloadProfilePhoto photoTask = new DownloadProfilePhoto(ProfileActivity.this, "sUrl");
-    SciGamesHttpPoster task = new SciGamesHttpPoster(ProfileActivity.this,"http://mysweetwebsite.com/pull/auth_student.php");
+    SciGamesHttpPoster task = new SciGamesHttpPoster(ProfileActivity.this,"http://db.scigam.es/pull/auth_student.php");
     
     public ProfileActivity() {
     	
@@ -143,7 +143,7 @@ public class ProfileActivity extends Activity implements SciGamesListener{
     	visitIdIn = i.getStringExtra("visitId");
 //    	rfidIn = i.getStringExtra("rfid");
     	photoUrl = i.getStringExtra("photoUrl");
-    	photoUrl = "http://mysweetwebsite.com/" + photoUrl;
+    	photoUrl = "http://db.scigam.es/" + photoUrl;
 //    	slideLevel = i.getStringExtra("slideLevel");
 //    	cartLevel = i.getStringExtra("cartLevel");
     	Log.d(TAG,"...getStringExtra");
@@ -214,7 +214,7 @@ public class ProfileActivity extends Activity implements SciGamesListener{
 		task.cancel(true);
 
 	    //create a new async task for every time you hit login (each can only run once ever)
-	   	task = new SciGamesHttpPoster(ProfileActivity.this,"http://mysweetwebsite.com/pull/return_profile.php");
+	   	task = new SciGamesHttpPoster(ProfileActivity.this,"http://db.scigam.es/pull/return_profile.php");
 	    //set listener
         task.setOnResultsListener(ProfileActivity.this);
         		
