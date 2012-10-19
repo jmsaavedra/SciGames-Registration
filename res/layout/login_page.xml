@@ -63,7 +63,7 @@
         android:hint="@string/password"
         android:textSize="32px"
         android:imeOptions="actionNext"
-        android:inputType="textPassword" />
+        android:inputType="textNoSuggestions" />
     
     <EditText
         android:id="@+id/class_id"

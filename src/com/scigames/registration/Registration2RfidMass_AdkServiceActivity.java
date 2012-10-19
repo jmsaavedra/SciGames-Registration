@@ -429,7 +429,8 @@ public class Registration2RfidMass_AdkServiceActivity extends Activity implement
 		greets.setVisibility(View.INVISIBLE);
 		thisMass = (TextView) findViewById(R.id.mass);
 		thisMass.setText(m);
-        thisMass.setVisibility(View.VISIBLE);
+        //thisMass.setVisibility(View.VISIBLE); 
+		thisMass.setVisibility(View.INVISIBLE);/** keep invisible for actual use! **/
 		
 		massContinueButton = (Button) findViewById(R.id.mass_continue_button);
 		massContinueButton.setVisibility(View.VISIBLE);
